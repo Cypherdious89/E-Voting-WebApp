@@ -1,0 +1,20 @@
+.main {
+	background-color: #010110;
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.title {
+	margin: 0;
+	color: #FFF;
+}
+
+.description {
+	padding: 5px 200px;
+	color: #FFF;
+	text-align: justify;
+}
