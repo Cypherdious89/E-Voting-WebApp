@@ -4,6 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 
 const theme = createTheme();
 
@@ -14,6 +15,8 @@ function SignUp() {
     const [mobileNumber, setMobileNumber] = useState('');
     const [aadhar, setAadhar] = useState('');
     const [uid, setUid] = useState('');
+
+    const navigate = useNavigate();
 
     async function SignupUser(event){
         event.preventDefault();
@@ -33,7 +36,9 @@ function SignUp() {
 
         });
         const data = await response.json();
-        console.log(data);
+        if(data.status === 'OK!') {
+            navigate('/login')
+        }
     }
 
     return (
@@ -118,7 +123,8 @@ function SignUp() {
                                 id = "aadhar"
                                 label="Aadhar No."
                                 onKeyPress={(e) => {if (!/[0-9]/.test(e.key)) {e.preventDefault();}}}
-                                inputProps={{ maxLength: 12 }}
+                                inputProps={{ maxLength: 12}}
+                                type = "password"
                             />
                         </Grid>
                     </Grid>

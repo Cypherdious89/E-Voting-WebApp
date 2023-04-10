@@ -1,15 +1,38 @@
 import {Avatar, Button,TextField, Box, Typography, Container} from "@mui/material";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { useState } from 'react';
+
 
 export default function LogIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-        email: data.get("email"),
-        password: data.get("password"),
-    });
-  };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [accessCode, setAccessCode] = useState('');
+
+
+  async function Adminlogin(event) {
+      event.preventDefault();
+      const response = await fetch('http://localhost:5500/api/admin_login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email,
+              password,
+              mobileNo,
+              accessCode
+          })
+      });
+      const data = await response.json();
+      if (data.user) {
+          localStorage.setItem('token', data.user)
+          alert('Login successful !');
+          window.location.href = '/admin-dashboard'
+      } else {
+          alert('Invalid credentials, please try again !')
+      }
+  }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -31,8 +54,10 @@ export default function LogIn() {
         <Typography component="h1" variant="h5">
             Admin Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component = "form" onSubmit = {Adminlogin} noValidate sx = {{mt: 1}} >
             <TextField
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 name = "email" required fullWidth
                 id="email"
                 label="Email Address"
@@ -40,6 +65,8 @@ export default function LogIn() {
                 margin="normal"
             />
             <TextField
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 name = "password" required fullWidth
                 label="Password"
                 type="password"
@@ -47,6 +74,8 @@ export default function LogIn() {
                 margin="normal"
             />
             <TextField
+                value={mobileNo}
+                onChange={(e) => setMobileNo(e.target.value)}
                 name = "mobile" required fullWidth
                 id = "mobile"
                 label="Mobile No."
@@ -55,10 +84,11 @@ export default function LogIn() {
                 margin="normal"
             />
             <TextField
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value)}
                 name = "code" required fullWidth
                 id = "code"
                 label="Access Code"
-                inputProps={{ maxLength: 16 }}
                 margin="normal"
             />
             <Button

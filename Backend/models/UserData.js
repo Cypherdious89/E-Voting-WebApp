@@ -1,4 +1,4 @@
-const mongoose = reuire('mongoose');
+const mongoose = require('mongoose');
 
 const User = new mongoose.Schema(
     {
@@ -6,8 +6,8 @@ const User = new mongoose.Schema(
         email : {type: String, required: true, unique: true},
         password : {type: String, required: true},
         mobileNumber : {type: Number, required: true},
-        aadhar : {type: Number, required: true},
-        uid : {type: String, required: true},
+        aadhar : {type: Number, required: true, unique: true},
+        uid : {type: String, required: true, unique: true},
     }, 
     {collection: 'user-data'}
 )
