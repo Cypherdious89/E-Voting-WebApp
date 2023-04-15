@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {decodeToken} from "react-jwt";
 
 function UserDashboard() {
@@ -32,7 +32,16 @@ function UserDashboard() {
         }
     }, [navigate])
     return (
-        <h1>Hello {name || "Unknown"}!</h1>
+        <> 
+            <h1>User Page</h1>
+            <h3>Hello {name || "Unknown"}!</h3>
+            <ul>
+                <li><Link to='/ongoing-elections'>Ongoing Elections</Link></li>
+                <li><Link to='/results'>View Recent Results</Link></li>
+                <li><Link to='/profile'>User Profile</Link></li>
+                <li><Link to='/login'>Logout !</Link></li>
+            </ul>
+        </>
     )
 }
 

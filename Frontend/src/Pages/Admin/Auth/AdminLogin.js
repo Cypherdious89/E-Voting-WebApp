@@ -90,6 +90,7 @@ export default function LogIn() {
                 id = "code"
                 label="Access Code"
                 margin="normal"
+                type="password"
             />
             <Button
                 type="submit"

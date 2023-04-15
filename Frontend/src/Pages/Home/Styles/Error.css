@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300');
+
+.container{
+    background: #3498DB;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    height: 78.5vh;
+    padding: 5rem;
+}
+
+.error-heading{
+    font-size: 20vh;
+    margin: 0;
+    padding: 5rem 0;
+}
+
+.error-description span{
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.error-links:link, .error-links:visited{
+    text-decoration: none;
+    color: #fff;
+}
+
+.error-links:hover{
+    text-decoration: none;
+    background: #fff;
+    color: #3498DB;
+    cursor: pointer;
+}

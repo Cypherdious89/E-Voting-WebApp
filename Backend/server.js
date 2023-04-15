@@ -52,7 +52,7 @@ app.post('/api/login', async (req, res) => {
         return res.json({status: 'OK', user: token});
     }
     else
-        return res.json({status: 'error', user:false});
+        return res.json({status: 'error', user: false});
 })
 
 

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
 import {decodeToken} from "react-jwt";
 
@@ -31,7 +32,17 @@ function AdminDashboard() {
         }
     }, [navigate])
     return (
-        <h1>Admin Page : {name || "Unknown"}!</h1>
+        <> 
+            <h1>Admin Page</h1>
+            <h3>Hello Mr. {name || "Unknown"}!</h3>
+            <ul>
+                <li><Link to='/add-election'>Add Election</Link></li>
+                <li><Link to='/view-elections'>View Ongoing Elections</Link></li>
+                <li><Link to='/view-results'>View Recent Results</Link></li>
+                <li><Link to='/admin-profile'>Admin Profile</Link></li>
+                <li><Link to='/admin-login'>Logout !</Link></li>
+            </ul>
+        </>
     )
 }
 
