@@ -14,6 +14,8 @@ import AddElection from "./Pages/Admin/AdminPage/AddElection"
 import AdminDashboard from "./Pages/Admin/AdminPage/AdminDashboard"
 import ViewElections from "./Pages/Admin/AdminPage/ViewElections"
 import AdminProfile from "./Pages/Admin/AdminPage/Profile"
+import CandidateList from './Pages/Admin/AdminPage/CandidateList'
+import EditElection from './Pages/Admin/AdminPage/EditElection'
 import ConcludedElections from "./Pages/Admin/AdminPage/Results"
 
 function Router() {
@@ -32,8 +34,10 @@ function Router() {
       <Route path='admin-dashboard' element ={<AdminDashboard />} />
       <Route path='add-election' element ={<AddElection />} />
       <Route path='view-elections' element ={<ViewElections />} />
-      <Route path='admin-profile' element ={<AdminProfile />}/>
+      <Route path='view-elections/:_id/candidate-list' element={<CandidateList />}/>
+      <Route path='view-elections/:_id/edit-election-details' element={<EditElection />}/>
       <Route path='view-results' element ={<ConcludedElections />} />
+      <Route path='admin-profile' element ={<AdminProfile />}/>
       <Route path='*' element={<ErrorPage />}/>
 		</Routes>
 	</BrowserRouter>

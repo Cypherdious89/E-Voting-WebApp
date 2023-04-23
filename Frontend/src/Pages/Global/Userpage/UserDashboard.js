@@ -14,7 +14,7 @@ function UserDashboard() {
         })
  
         const data = req.json();
-        if(data.status === 'ok'){
+        if(data.status === 'OK'){
             console.log(data)
         }
     } 
@@ -31,6 +31,11 @@ function UserDashboard() {
             }
         }
     }, [navigate])
+    const logout = () => {
+        window.localStorage.clear();
+        window.location.href = '/login'
+        alert("Successfully Logged Out !")
+    }
     return (
         <> 
             <h1>User Page</h1>
@@ -39,7 +44,7 @@ function UserDashboard() {
                 <li><Link to='/ongoing-elections'>Ongoing Elections</Link></li>
                 <li><Link to='/results'>View Recent Results</Link></li>
                 <li><Link to='/profile'>User Profile</Link></li>
-                <li><Link to='/login'>Logout !</Link></li>
+                <li><Link onClick={logout}>Logout !</Link></li>
             </ul>
         </>
     )

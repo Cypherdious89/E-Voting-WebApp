@@ -31,6 +31,12 @@ function AdminDashboard() {
             }
         }
     }, [navigate])
+
+    const logout = () => {
+        window.localStorage.clear();
+        window.location.href = '/admin-login'
+        alert("Successfully Logged Out !")
+    }
     return (
         <> 
             <h1>Admin Page</h1>
@@ -40,7 +46,7 @@ function AdminDashboard() {
                 <li><Link to='/view-elections'>View Ongoing Elections</Link></li>
                 <li><Link to='/view-results'>View Recent Results</Link></li>
                 <li><Link to='/admin-profile'>Admin Profile</Link></li>
-                <li><Link to='/admin-login'>Logout !</Link></li>
+                <li><Link onClick={logout}>Logout !</Link></li>
             </ul>
         </>
     )

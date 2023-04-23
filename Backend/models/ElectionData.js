@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const image = new mongoose.Schema(
+const Image = new mongoose.Schema(
     {
         fileName: {type: String, required: true},
         file: {data: Buffer, contentType: String},
@@ -9,7 +9,7 @@ const image = new mongoose.Schema(
     {collection: 'candidate-image-data'}
 );
 
-const candidate = new mongoose.Schema(
+const Candidate = new mongoose.Schema(
     {
         candidateName: {type: String, required: true, maxlength: 40},
         candidateAge: {type: Number, required: true},
@@ -19,31 +19,22 @@ const candidate = new mongoose.Schema(
     {collection: 'candidate-data'}
 )
 
-const voter = new mongoose.Schema(
-    {
-        VoterName: {type: String},
-        VoterAge: {type: Number},
-        VoterHashID: {type: String, required: true}
-    },
-    {collection: 'voter-data'}
-)
-
-const election = new mongoose.Schema(
+const Election = new mongoose.Schema(
     {
         title: {type: String, required: true},
-        MaxCandidate: {type: Number, required: true},
-        MaxVoter: {type: Number, required: true},
-        MaxVote: {type: Number, required: true},
-        AgeRestriction: {type: Boolean, required: true},
+        area: {type: String, required: true},
+        maxCandidate: {type: Number, required: true},
+        maxVoter: {type: Number, required: true},
+        maxVoteCount: {type: Number, required: true},
+        ageRestriction: {type: Boolean, required: true},
         candidates: {type: [Candidate]},
-        voters: {type: [Voter]}
+        voters: {type: Array},
+        active: {type: Boolean, default: true},
+        phase: {type: Number, default: 0}
     }, 
     {collection: 'election-data'}
 )
 
-const ImageSchema = mongoose.model('CandidteImage', image);
-const CandidateSchema = mongoose.model('CandidateData', candidate);
-const VoterSchema = mongoose.model('VotersData', voter)
-const ElectionSchema = mongoose.model('ElectionData', election);
+const ElectionSchema = mongoose.model('ElectionData', Election);
 
-module.exports = {Image: ImageSchema, Candidate: CandidateSchema, Voter: VoterSchema, Election: ElectionSchema};
+module.exports = ElectionSchema;

@@ -15,8 +15,8 @@ function Home() {
 				for organizations, governments, and institutions to conduct online elections securely and efficiently. 
 				</h3>
 				<div className="home-btn">
-					<button className="main-btn" onClick={() => navigate('/signup')}>Sign Up</button>
-					<button className="main-btn" onClick={() => navigate('/login')}>Login</button>
+					<button className="primaryBtn" onClick={() => navigate('/signup')}>Sign Up</button>
+					<button className="primaryBtn" onClick={() => navigate('/login')}>Login</button>
 				</div>
 			</div>
 		</>

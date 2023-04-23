@@ -24,8 +24,8 @@ export default function LogIn() {
         const data = await response.json();
         if(data.user){
             localStorage.setItem('token', data.user)
+            sessionStorage.setItem("userDetails", JSON.stringify(data.details));
             alert('Login successful !');
-            console.log(data)
             window.location.href = '/user-dashboard'
         } else {
             alert('Invalid credentials, please try again !')
