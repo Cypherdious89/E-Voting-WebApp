@@ -1,22 +1,18 @@
-import React from 'react'
-import { Link, useNavigate} from 'react-router-dom'
-import './Styles/Error.css'
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import styles from "./Styles/Error.module.css";
 
-function Error() {
-  let navigate = useNavigate();
+const NotFoundPage = () => {
+  const location = useLocation();
   return (
-    <>
-      <div className="container">
-        <h1 className='error-heading'>:( </h1>
-        <h2 className='error-description'>A <span>404</span> error occured, Page not found, check the URL and try again.</h2>
-        <h3>
-          <Link to = "/"className = 'error-links' > Return to home </Link> 
-            &nbsp;|&nbsp; 
-          <Link className='error-links' to={() => navigate(-1)}>Go Back</Link >
-        </h3>
-      </div>
-    </>
-  )
-}
+    <div className={styles.container}>
+      <h1 className={styles.title}>404</h1>
+      <p className={styles.message}>Page Not Found</p>
+      <Link to={location.state?.from || "/"} className={styles.button}>
+        Go back to previous page
+      </Link>
+    </div>
+  );
+};
 
-export default Error
+export default NotFoundPage;

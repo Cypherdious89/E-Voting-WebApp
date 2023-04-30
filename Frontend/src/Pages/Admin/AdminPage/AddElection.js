@@ -32,7 +32,6 @@ function AddElection() {
     });
 
     const data = await response.json();
-    // console.log(data)
     if (data.status === 'OK!') {
       alert('Successfully added election details !');
       window.location.href = '/admin-dashboard'
@@ -42,26 +41,21 @@ function AddElection() {
   }
 
   return (
-        <Container component="main" maxWidth="md">
-        <Box
-            sx={{
-                boxShadow: 3,
-                borderRadius: 2,
-                px: 4,
-                py: 4,
-                marginTop: 5,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
+    <>
+      <Container component="main" maxWidth="md">
+        <Box sx={{
+              boxShadow: 3,
+              borderRadius: 2,
+              px: 4, py: 4,
+              marginTop: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+          }}
         >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            < PollRoundedIcon / >
-        </Avatar>
-        <Typography component="h1" variant="h5">
-            Add Election
-        </Typography>
-        <Box component = "form" onSubmit = {AddElectiontoDB} noValidate sx = {{mt: 1}} >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><PollRoundedIcon /></Avatar>
+          <Typography component="h1" variant="h5">Add Election</Typography>
+          <Box component = "form" onSubmit = {AddElectiontoDB} noValidate sx = {{mt: 1}} >
             <TextField
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -149,9 +143,10 @@ function AddElection() {
             >
               Add Election
             </Button>
-            </Box>
+          </Box>
         </Box>
     </Container>
+    </>
   )
 }
 

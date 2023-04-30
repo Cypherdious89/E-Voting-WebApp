@@ -1,4 +1,4 @@
-.main {
+/* .main {
 	background-color: #010110;
 	height: 100vh;
 	width: 100%;
@@ -17,4 +17,142 @@
 	padding: 5px 200px;
 	color: #FFF;
 	text-align: justify;
+} */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #212529;
+  color: #fff;
+  font-size: 20px;
 }
+
+.logo {
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  margin-left: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 200px;
+  background-image: linear-gradient(to bottom, rgba(33, 37, 41, 0.8), rgba(33, 37, 41, 0.8)), url('../../../../public/banner.png');
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  text-align: center;
+}
+
+.banner-heading {
+  font-size: 60px;
+  margin: 0;
+}
+
+.banner-subheading {
+  font-size: 24px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.banner-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.banner-button:hover {
+  background-color: #0069d9;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px -10px rgba(24, 90, 219, 0.6);
+}
+
+.features {
+  padding: 100px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.features-heading {
+  font-size: 40px;
+  margin: 0;
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-item {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.feature-item:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #212529;
+  color: #fff;
+  font-size: 16px;
+}
+
+.footer-text {
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* .footer-link {
+  margin-left: 20px;
+  color: #fff;
+  text-decoration: none;
+} */
+
+/* .footer-link:hover {
+  text-decoration: underline;
+} */

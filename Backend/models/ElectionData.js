@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const Image = new mongoose.Schema(
     {
-        fileName: {type: String, required: true},
-        file: {data: Buffer, contentType: String},
-        uploadTime: {type: Date, default: Date.now},
+        name: {type: String, required: true},
+        file: {type: String, required: true},
+        uploadTime: {type: String, required: true},
     },
     {collection: 'candidate-image-data'}
 );
@@ -13,8 +13,9 @@ const Candidate = new mongoose.Schema(
     {
         candidateName: {type: String, required: true, maxlength: 40},
         candidateAge: {type: Number, required: true},
-        candidatePhoto: {type: [Image], required: true},
-        candidateUID: {type: String, required: true}
+        candidatePhoto: {type: Image, required: true},
+        candidateUID: {type: String, required: true},
+        candidateDOB: {type: String, required: true}
     },
     {collection: 'candidate-data'}
 )

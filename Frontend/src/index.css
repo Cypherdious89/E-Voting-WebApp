@@ -22,7 +22,7 @@ code {
     border: none;
     color: white;
     background: #185adb;
-    transition: all 0.25s ease;
+    transition: all 0.5s ease-in-out;
 }
 
 .primaryBtn:hover {

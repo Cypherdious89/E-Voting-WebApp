@@ -1,17 +1,18 @@
 import React, {useState} from 'react'
 import styles from './assets/Modal.module.css'
+
 import { RiCloseLine } from "react-icons/ri";
 
-function CandidateModal({ setIsModalOpen, electionID }) {
-    const [candidateName, setCandidateName] = useState('')
-    const [candidateUID, setCandidateUID] = useState('')
-    const [candidateImage, setCandidateImage] = useState('')
-    const [candidateDOB, setCandidateDOB] = useState('')
-    var [candidateAge, setCandidateAge] = useState()
-    var [candidateImageName, setCandidateImageName] = useState('')
+function CandidateModal({setEditModal, candidate, electionID}) {
+    const candidateID = candidate._id;
+    const [candidateName, setCandidateName] = useState(candidate.candidateName)
+    const [candidateUID, setCandidateUID] = useState(candidate.candidateUID)
+    const [candidateImage, setCandidateImage] = useState(candidate.candidatePhoto)
+    const [candidateDOB, setCandidateDOB] = useState(candidate.candidateDOB)
+    var [candidateAge, setCandidateAge] = useState(candidate.candidateAge)
+    var [candidateImageName, setCandidateImageName] = useState()
 
-
-    function convertToBase64(hash){
+    function convertToBase64(hash) {
         const reader = new FileReader();
         candidateImageName = hash.target.files[0].name;
         reader.readAsDataURL(hash.target.files[0]);
@@ -20,8 +21,8 @@ function CandidateModal({ setIsModalOpen, electionID }) {
             setCandidateImageName(candidateImageName);
         };
         reader.onerror = (error) => {
-            console.log("Error : ", error);
-        } 
+            console.log("Error : ", error)
+        }
     }
 
     function ageCalculator(input) {
@@ -33,43 +34,43 @@ function CandidateModal({ setIsModalOpen, electionID }) {
         setCandidateAge(candidateAge);
     }
 
-    async function populateCandidate(event) {
+    async function editCandidate(event){
         event.preventDefault()
-        const response = await fetch('http://localhost:5500/api/add_candidate', {
+        const response = await fetch(`http://localhost:5500/api/${electionID}/edit_candidate_details`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
             body: JSON.stringify({
+                candidateID,
                 candidateName,
                 candidateUID,
                 candidateImage,
                 candidateImageName,
-                candidateDOB,
                 candidateAge,
+                candidateDOB,
                 electionID
             })
         });
         const data = await response.json();
         if (data.status === 'OK') {
-            alert('Successfully added candidate details !');
-            setIsModalOpen(false);
+            alert('Successfully modified candidate details !');
+            setEditModal(false);
             window.location.href = `/view-elections/${electionID}/candidate-list`
         } else {
             alert('Some error occurred, please try again !')
         }
     }
-
     return (
     <>
-        <div className={styles.darkBG} onClick={() => setIsModalOpen(false)} />
+        <div className={styles.darkBG} onClick={() => setEditModal(false)} />
         <div className={styles.centered}>
             <div className={styles.modal}>
                 <div className={styles.modalHeader}>
-                    <h5 className={styles.heading}>Add Candidate</h5>
+                    <h5 className={styles.heading}>Edit Candidate Details</h5>
                 </div>
-                <button className={styles.closeBtn} onClick={() => setIsModalOpen(false)}>
+                <button className={styles.closeBtn} onClick={() => setEditModal(false)}>
                     <RiCloseLine style={{ marginBottom: "-3px" }} />
                 </button>
                 <div className={styles.modalContent}>
@@ -98,10 +99,10 @@ function CandidateModal({ setIsModalOpen, electionID }) {
                         </div>
                         <div className={styles.formData}>
                             <label className={styles.modalLabel}>Date of Birth</label>
-                            <input
+                            <input 
                                 type="date" required
                                 value={candidateDOB}
-                                onChange={(e) => {setCandidateDOB(e.target.value.toString()); ageCalculator(candidateDOB)}}
+                                onChange={(e) => {setCandidateDOB(e.target.value); ageCalculator(candidateDOB)}}
                                 name="age" 
                                 id="age" 
                                 className={styles.datePicker}
@@ -112,8 +113,9 @@ function CandidateModal({ setIsModalOpen, electionID }) {
                             <label className={styles.modalLabel}>Candidate Image</label>
                             <input 
                                 type="file" required
+                                // value=""
                                 onChange={convertToBase64}
-                                accept="image/*" 
+                                accept="image/*"
                             />
                             {candidateImage==="" || candidateImage==null ? "" : <img className={styles.imagePreview} alt="Candidate Phtoto" width={100} height={100} src={candidateImage}/>}
                         </div>
@@ -121,8 +123,8 @@ function CandidateModal({ setIsModalOpen, electionID }) {
                 </div>
                 <div className={styles.modalActions}>
                     <div className={styles.actionsContainer}>
-                        <button className={styles.addBtn} onClick={populateCandidate}>Confirm</button>
-                        <button className={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>Cancel</button>
+                        <button className={styles.addBtn} onClick={editCandidate}>Confirm</button>
+                        <button className={styles.cancelBtn} onClick={() => setEditModal(false)}>Cancel</button>
                     </div>
                 </div>
             </div>
