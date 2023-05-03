@@ -57,7 +57,7 @@ function CandidateModal({setEditModal, candidate, electionID}) {
         if (data.status === 'OK') {
             alert('Successfully modified candidate details !');
             setEditModal(false);
-            window.location.href = `/view-elections/${electionID}/candidate-list`
+            window.location.href = `/admin/elections/${electionID}/candidates`
         } else {
             alert('Some error occurred, please try again !')
         }

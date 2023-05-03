@@ -55,7 +55,7 @@ function CandidateModal({ setIsModalOpen, electionID }) {
         if (data.status === 'OK') {
             alert('Successfully added candidate details !');
             setIsModalOpen(false);
-            window.location.href = `/view-elections/${electionID}/candidate-list`
+            window.location.href = `/admin/elections/${electionID}/candidates`
         } else {
             alert('Some error occurred, please try again !')
         }

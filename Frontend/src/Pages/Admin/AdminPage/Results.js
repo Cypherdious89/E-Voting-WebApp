@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import AdminNavbar from './Components/AdminNavbar';
 
 function Results() {
   const [electionList, setElectionList] = useState([]);
@@ -13,6 +14,7 @@ function Results() {
   }, [])
   return (
     <>
+      <AdminNavbar />
       <h1>Completed Elections</h1>
       <div className="election-card">
         {electionList.map(ele  => {

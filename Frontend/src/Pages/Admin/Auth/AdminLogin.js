@@ -25,11 +25,11 @@ export default function LogIn() {
             })
         });
         const data = await response.json();
-        if (data.user) {
-                localStorage.setItem('token', data.user)
+        if (data.admin) {
+                localStorage.setItem('adminToken', data.admin)
                 sessionStorage.setItem("adminDetails", JSON.stringify(data.details));
                 alert('Login successful !');
-                window.location.href = '/admin-dashboard'
+                window.location.href = '/admin/dashboard'
         } else {
                 alert('Invalid credentials, please try again !')
         } 

@@ -6,6 +6,7 @@ const User = require('./models/UserData')
 const Admin = require('./models/AdminData')
 const Election = require('./models/ElectionData')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 const ObjectID = require('mongodb').ObjectId
 
 app.use(cors());
@@ -23,12 +24,13 @@ app.get('/', (req, res) => {
 //! Authentiction Routes
 //? User signup route
 app.post('/api/signup', async (req, res) => {
-    // console.log(req.body);
     try{
+        const newPassword = await bcrypt.hash(req.body.password, 10)
+        // const newAadhar = await bcrypt.hash(req.body.aadhar, 10)
         await User.create({
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: newPassword,
             mobileNumber: req.body.mobileNumber,
             aadhar: req.body.aadhar,
             uid: req.body.uid
@@ -43,84 +45,85 @@ app.post('/api/signup', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     const user = await User.findOne({
         email: req.body.email,
-        password: req.body.password,
         mobileNumber: req.body.mobileNumber,
     })
 
+    if(!user){
+        return res.json({status: 'error', user: false, message: "Invalid email or mobile number !"});
+    }
+
+    const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
+
     const userDetails = user;
 
-    if(user){
-        const token = jwt.sign({
+    if (isPasswordValid) {
+        const userToken = jwt.sign({
             username : user.username,
             email : user.email
         }, "VGhpc0lzVGhlTG9naW5TZWNyZXQ=")
-        return res.json({status: 'OK', user: token, details: userDetails});
+        return res.json({status: 'OK', user: userToken, details: userDetails});
     }
     else
-        return res.json({status: 'error', user: false});
+        return res.json({status: 'error', user: false, message: "Invalid username or email !"});
 })
 
 //? Admin Login route
 app.post('/api/admin_login', async (req, res) => {
-    const user = await Admin.findOne({
+    const admin = await Admin.findOne({
         email: req.body.email,
-        password: req.body.password,
+        mobileNo: req.body.mobileNo
     })
 
-    const adminDetails = user;
+    if(!admin){
+        return res.json({status: 'error', admin: false, message: "Invalid email or mobile number !"});
+    }
 
-    if (user && (req.body.accessCode === adminAccessCode)) {
-        const token = jwt.sign({
-            username: user.name,
-            email: user.email,
+    const adminDetails = admin;
+    const isPasswordValid = await bcrypt.compare(req.body.password, admin.password);
+
+    if (isPasswordValid && (req.body.accessCode === adminAccessCode)) {
+        const adminToken = jwt.sign({
+            username: admin.name,
+            email: admin.email,
         }, "QWRtaW5Mb2dpbg==")
-        return res.json({
-            status: 'OK!',
-            user: token,
-            details: adminDetails
-        });
+        return res.json({status: 'OK!', admin: adminToken, details: adminDetails});
     } else
-        return res.json({
-            status: 'error',
-            user: false
-        });
+        return res.json({status: 'error', user: false, message: "Invalid username or email !"});
 })
 
 //! Dashboard Routes
 //? Userpage route
 app.get('/api/user', async (req, res) => {
-    const token = req.headers['x-access-token']
+    const userToken = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(token, "VGhpc0lzVGhlTG9naW5TZWNyZXQ=")
+        const decoded = jwt.verify(userToken, "VGhpc0lzVGhlTG9naW5TZWNyZXQ=")
         const email = decoded.email
         const user = await User.findOne({email: email})
         if(user)
-            return res.json({status: 'ok'})
+            return res.json({status: 'OK'})
         else
             return res.json({status: 'error'})
 
     } 
     catch (error) {
-        console.log(error)
-        res.json({status: 'error', error: 'invalid token'})
+        res.json({status: 'error', error: error})
     }
 })
 
 //? Adminpage route
 app.get('/api/admin', async (req, res) => {
-    const token = req.headers['x-access-token']
+    const adminToken = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(token, "QWRtaW5Mb2dpbg==")
+        const decoded = jwt.verify(adminToken, "QWRtaW5Mb2dpbg==")
         const email = decoded.email
         const admin = await Admin.findOne({email: email})
         if (admin)
-            return res.json({status: 'ok'})
+            return res.json({status: 'OK'})
         else
             return res.json({status: 'error'})
     } 
     catch (error) {
-        console.log(error)
-        res.json({status: 'error', error: 'invalid token'})
+        res.json({status: 'error', error: error})
     }
 })
 
@@ -191,6 +194,21 @@ app.get('/api/get_completed_elections', async (req, res) => {
     catch (err) {
         console.log(err);
         return res.json({status: 'error'});
+    }
+})
+
+//? Change Election Phase & Status
+app.put('/api/change_election_phase', async(req, res) => {
+    const electionID = req.body.electionID;
+    try{
+        const filter = {"_id": new ObjectID(`${electionID}`)}
+        const update = {$set : {phase: req.body.phase, active: req.body.active}}
+        const result = await Election.updateOne(filter, update);
+        res.send({status: 'OK'})
+    } 
+    catch (err) {
+        console.log(err);
+        return res.json({status: 'error', data: err});
     }
 })
 
@@ -283,6 +301,8 @@ app.post('/api/:_id/find_candidate_details', async (req, res) => {
     }
 })
 
+
+//? Find particular candidate in a election & delete it
 app.delete('/api/:election_id/delete_candidate/:candidate_id', async(req, res) => {
     const electionID = req.params.election_id, candidateID = req.params.candidate_id;
     try {

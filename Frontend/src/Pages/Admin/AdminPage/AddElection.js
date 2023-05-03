@@ -34,7 +34,7 @@ function AddElection() {
     const data = await response.json();
     if (data.status === 'OK!') {
       alert('Successfully added election details !');
-      window.location.href = '/admin-dashboard'
+      window.location.href = '/admin/dashboard'
     } else {
       alert('Some error occurred, please try again !')
     }

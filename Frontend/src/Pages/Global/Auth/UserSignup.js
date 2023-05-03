@@ -19,6 +19,12 @@ function SignUp() {
 
     const navigate = useNavigate();
 
+    const handleKeyDown = (e) => {
+      if (!/[0-9]/.test(e.key)) {
+        e.preventDefault();
+      }
+    };
+
     async function SignupUser(event){
         event.preventDefault();
         const response = await fetch('http://localhost:5500/api/signup', {
@@ -38,7 +44,7 @@ function SignUp() {
         });
         const data = await response.json();
         if(data.status === 'OK!') {
-            navigate('/login')
+            navigate('/user/login')
         }
     }
 
@@ -103,7 +109,7 @@ function SignUp() {
                                 name = "mobile" required fullWidth
                                 id = "mobile"
                                 label="Mobile No."
-                                onKeyPress={(e) => {if (!/[0-9]/.test(e.key)) {e.preventDefault();}}}
+                                onKeyDown={handleKeyDown}
                                 inputProps={{ maxLength: 10 }}
                             />
                         </Grid>
@@ -123,7 +129,7 @@ function SignUp() {
                                 name = "aadhar" required fullWidth
                                 id = "aadhar"
                                 label="Aadhar No."
-                                onKeyPress={(e) => {if (!/[0-9]/.test(e.key)) {e.preventDefault();}}}
+                                onKeyDown={handleKeyDown}
                                 inputProps={{ maxLength: 12}}
                                 type = "password"
                             />
@@ -139,7 +145,7 @@ function SignUp() {
                     </Button>
                     <Grid container justifyContent="flex-end">
                     <Grid item>
-                        <Link to= "/login" variant="body2">
+                        <Link to= "/user/login" variant="body2">
                             Already have an account? Sign in
                         </Link>
                     </Grid>

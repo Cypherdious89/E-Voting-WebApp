@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import CandidateModal from './Components/CandidateModal';
 import CandidateTable from './Components/CandidateTable';
+import AdminNavbar from './Components/AdminNavbar';
 
 function CandidateList() {
     const location = useLocation();
@@ -23,6 +24,7 @@ function CandidateList() {
 
     return (
         <>
+            <AdminNavbar />
             <h1>Candidate List for {election.title} - {election.area}</h1>
             {candidateList?.length ? <CandidateTable candidateList={candidateList} electionID={election._id}/> : <h3>No candidates Found</h3>}
             <Button 
@@ -33,7 +35,6 @@ function CandidateList() {
             >
                 Add Candidate
             </Button>
-            {/* <button className='primaryBtn' onClick={(e) => setIsModalOpen(true)}>Add Candidate</button> */}
             {isModalOpen && <CandidateModal setIsModalOpen={setIsModalOpen} electionID={election._id}/>}
         </>
     )

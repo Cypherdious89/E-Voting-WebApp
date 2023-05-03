@@ -6,11 +6,18 @@
 }
 
 .election-container {
-  /* max-width: 960px; */
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  grid-gap: 20px;
   margin: 0 auto;
   padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .election-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Styles for the active elections page */
@@ -57,9 +64,10 @@
   list-style: none;
 }
 
-.election-card-button-container {
+.election-button-container {
+  margin: 20px 0 5px 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .election-card-button {
@@ -119,3 +127,22 @@
   transform: scale(1);
 }
 
+.property-grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+}
+
+.property-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.property-title {
+  font-weight: bold;
+}
+
+.property-value {
+  margin-top: 5px;
+}

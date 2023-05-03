@@ -41,7 +41,7 @@ function EditElection() {
     const data = await response.json();
     if (data.status === 'OK') {
       alert('Successfully modified election details !');
-      window.location.href = '/view-elections'
+      window.location.href = '/admin/elections'
     } else {
       alert('Some error occurred, please try again !')
     }

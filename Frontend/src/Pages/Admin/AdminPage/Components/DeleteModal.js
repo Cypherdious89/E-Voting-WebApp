@@ -10,7 +10,7 @@ const Modal = ({setDeleteModal, electionID, candidateID}) => {
       const data = await response.json();
       if(data.status === 'OK') {
         alert(data.message)
-        window.location.href = `/view-elections/${electionID}/candidate-list`
+        window.location.href = `/admin/elections/${electionID}/candidates`
       } else {
         console.log(data.data)
         alert(data.message)

@@ -31,7 +31,11 @@ const Election = new mongoose.Schema(
         candidates: {type: [Candidate]},
         voters: {type: Array},
         active: {type: Boolean, default: true},
-        phase: {type: Number, default: 0}
+        phase: {
+            type: Number,
+            enum: [0, 1, 2, 3, 4],
+            default: 0
+        }
     }, 
     {collection: 'election-data'}
 )

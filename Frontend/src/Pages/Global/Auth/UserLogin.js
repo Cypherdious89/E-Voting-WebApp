@@ -23,10 +23,10 @@ export default function LogIn() {
         });
         const data = await response.json();
         if(data.user){
-            localStorage.setItem('token', data.user)
+            localStorage.setItem('userToken', data.user)
             sessionStorage.setItem("userDetails", JSON.stringify(data.details));
             alert('Login successful !');
-            window.location.href = '/user-dashboard'
+            window.location.href = '/user/dashboard'
         } else {
             alert('Invalid credentials, please try again !')
         }
@@ -91,12 +91,12 @@ export default function LogIn() {
             </Button>
             <Grid container>
                 <Grid item xs>
-                <Link to="/forgot-password" variant="body2">
+                <Link to="/user/forgot-password" variant="body2">
                     Forgot password?
                 </Link>
                 </Grid>
                 <Grid item>
-                <Link to="/signup" variant="body2">
+                <Link to="/user/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
                 </Link>
                 </Grid>

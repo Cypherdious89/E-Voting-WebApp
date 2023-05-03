@@ -9,7 +9,7 @@ function UserDashboard() {
     async function populateUser() {
         const req = await fetch('http://localhost:5500/api/user', {
             headers: {
-                'x-access-token' : localStorage.getItem('token')
+                'x-access-token' : localStorage.getItem('userToken')
             }
         })
  
@@ -18,14 +18,15 @@ function UserDashboard() {
             console.log(data)
         }
     } 
+    
     useEffect (() => {
-        const token = localStorage.getItem('token');
-        if(token){
-            const user = decodeToken(token)
+        const userToken = localStorage.getItem('userToken');
+        if (userToken) {
+            const user = decodeToken(userToken)
             setName(user.username)
             if(!user){
-                localStorage.removeItem(token);
-                navigate('/login')
+                localStorage.removeItem(userToken);
+                navigate('/user/login')
             } else {
                 populateUser();
             }
@@ -33,17 +34,17 @@ function UserDashboard() {
     }, [navigate])
     const logout = () => {
         window.localStorage.clear();
-        window.location.href = '/login'
         alert("Successfully Logged Out !")
+        window.location.href = '/user/login'
     }
     return (
         <> 
             <h1>User Page</h1>
             <h3>Hello {name || "Unknown"}!</h3>
             <ul>
-                <li><Link to='/ongoing-elections'>Ongoing Elections</Link></li>
-                <li><Link to='/results'>View Recent Results</Link></li>
-                <li><Link to='/profile'>User Profile</Link></li>
+                <li><Link to='/user/elections'>Ongoing Elections</Link></li>
+                <li><Link to='/user/results'>View Recent Results</Link></li>
+                <li><Link to='/user/profile'>User Profile</Link></li>
                 <li><Link onClick={logout}>Logout !</Link></li>
             </ul>
         </>
