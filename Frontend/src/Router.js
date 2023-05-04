@@ -2,6 +2,7 @@ import React from 'react'
 import {Route, Routes, BrowserRouter} from "react-router-dom"
 import UserProtectedRoute from './Pages/Global/Auth/UserProtectedRoute'
 import AdminProtectedRoute from './Pages/Admin/Auth/AdminProtectedRoute'
+import AdminAccessRoute from './Pages/Admin/Auth/AdminAccessRoute'
 import Home from './Pages/Home/Home'
 import ErrorPage from './Pages/Home/Error'
 import Signup from './Pages/Global/Auth/UserSignup'
@@ -42,10 +43,10 @@ function Router() {
         <Route path='login' element = {<AdminLogin />} />
         <Route path='dashboard' element ={<AdminProtectedRoute Component={AdminDashboard}/>} />
         <Route path='elections' element ={<AdminProtectedRoute Component={ViewElections}/>} />
-        <Route path='elections/add' element ={<AdminProtectedRoute Component={AddElection}/>} />
+        <Route path='elections/add' element ={<AdminAccessRoute Component={AddElection}/>} />
         <Route path='elections/:_id/candidates' element={<AdminProtectedRoute Component={CandidateList}/>}/>
-        <Route path='elections/:_id/edit' element={<AdminProtectedRoute Component={EditElection}/>}/>
-        <Route path='elections/:_id/phase' element ={<AdminProtectedRoute Component={ChangePhase}/>}/>
+        <Route path='elections/:_id/edit' element={<AdminAccessRoute Component={EditElection}/>}/>
+        <Route path='elections/:_id/phase' element ={<AdminAccessRoute Component={ChangePhase}/>}/>
         <Route path='results' element ={<AdminProtectedRoute Component={ConcludedElections}/>} />
         <Route path='profile' element ={<AdminProtectedRoute Component={AdminProfile}/>}/>
         <Route path = '*' element = {<AdminProtectedRoute Component = {ErrorPage}/>} />

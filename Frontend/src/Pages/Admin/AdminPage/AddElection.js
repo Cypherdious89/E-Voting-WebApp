@@ -1,6 +1,7 @@
 import {Avatar, Button,TextField, Box, Typography, Container, FormGroup, FormControlLabel, Switch} from "@mui/material";
 import PollRoundedIcon from '@mui/icons-material/PollRounded';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function AddElection() {
   const [title, setTitle] = useState('');
@@ -9,10 +10,11 @@ function AddElection() {
   const [maxVoters, setMaxVoters] = useState('');
   const [maxVoteCount, setMaxVoteCount] = useState('');
   const [ageRestriction, setAgeRestriction] =useState(false);
-
   const min_candidates = 1, max_candidates = 100;
   const min_voters = 1, max_voters = 99999999;
   const min_winners = 1, max_winners = 10;
+  const location = useLocation();
+  const roles = location.state?.data
 
   async function AddElectiontoDB(event) {
     event.preventDefault();
@@ -27,7 +29,8 @@ function AddElection() {
         maxCandidate,
         maxVoters,
         maxVoteCount,
-        ageRestriction
+        ageRestriction,
+        roles
       })
     });
 

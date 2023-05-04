@@ -14,7 +14,21 @@ app.use(express.json({limit: '5mb'}));
 
 mongoose.connect('mongodb://0.0.0.0:27017/e-voting-webapp')
 
-const adminAccessCode = "AdminLogin@2580_IIITA"; //* Admin Access Code
+const adminAccessCode = "AdminLogin@2580_IIITA"; //! Admin Access Code
+
+function checkAdminReadWrite(req, res, next) {
+    console.log("Checking admin access")
+    const isAdmin = req.body.roles[1] === 'Admin';
+    const hasReadWrite = req.body.roles[0] === 'readwrite';
+    if (isAdmin && hasReadWrite) {
+        // User has the necessary permissions, so allow them to continue
+        next();
+    } else {
+        // User does not have the necessary permissions, so return an error response
+        console.log('Only admins can modify permissions and data')
+        res.status(403).json({status:'error', error: 'Forbidden'});
+    }
+}
 
 //! Home route
 app.get('/', (req, res) => {
@@ -85,6 +99,8 @@ app.post('/api/admin_login', async (req, res) => {
         const adminToken = jwt.sign({
             username: admin.name,
             email: admin.email,
+            access: admin.roles[0],
+            role: admin.roles[1],
         }, "QWRtaW5Mb2dpbg==")
         return res.json({status: 'OK!', admin: adminToken, details: adminDetails});
     } else
@@ -129,7 +145,7 @@ app.get('/api/admin', async (req, res) => {
 
 //! Election Functionality Routes
 //? Add Election Route
-app.post('/api/add_election_data', async (req, res) => {
+app.post('/api/add_election_data', checkAdminReadWrite, async (req, res) => {
     // console.log(req.body)
     try {
         await Election.create({
@@ -149,7 +165,7 @@ app.post('/api/add_election_data', async (req, res) => {
 })
 
 //? Modify Election Details
-app.post('/api/:_id/edit_election_details', async(req, res) => {
+app.post('/api/:_id/edit_election_details', checkAdminReadWrite, async(req, res) => {
     const electionID = req.params._id
     try {
         const filter = {_id: new ObjectID(`${electionID}`)};
@@ -198,7 +214,7 @@ app.get('/api/get_completed_elections', async (req, res) => {
 })
 
 //? Change Election Phase & Status
-app.put('/api/change_election_phase', async(req, res) => {
+app.put('/api/change_election_phase', checkAdminReadWrite, async(req, res) => {
     const electionID = req.body.electionID;
     try{
         const filter = {"_id": new ObjectID(`${electionID}`)}
@@ -214,7 +230,7 @@ app.put('/api/change_election_phase', async(req, res) => {
 
 //! Candidate Functionality Routes
 //? Add Candidate Route
-app.post('/api/add_candidate', async(req, res) => {
+app.post('/api/add_candidate', checkAdminReadWrite, async(req, res) => {
     try {
         const candidateDetails = {
             candidateName: req.body.candidateName,
@@ -240,7 +256,7 @@ app.post('/api/add_candidate', async(req, res) => {
 })
 
 //? Find candidate and update its details
-app.post('/api/:_id/edit_candidate_details', async(req, res) => {
+app.post('/api/:_id/edit_candidate_details', checkAdminReadWrite, async(req, res) => {
     const electionID = req.params._id, candidateID = req.body.candidateID;
     try {
         const query = await Election.findOneAndUpdate(
@@ -303,7 +319,7 @@ app.post('/api/:_id/find_candidate_details', async (req, res) => {
 
 
 //? Find particular candidate in a election & delete it
-app.delete('/api/:election_id/delete_candidate/:candidate_id', async(req, res) => {
+app.delete('/api/:election_id/delete_candidate/:candidate_id', checkAdminReadWrite, async(req, res) => {
     const electionID = req.params.election_id, candidateID = req.params.candidate_id;
     try {
         const filter = {_id: electionID};

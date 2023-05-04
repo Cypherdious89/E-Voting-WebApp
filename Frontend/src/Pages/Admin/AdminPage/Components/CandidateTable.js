@@ -17,11 +17,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-function CandidateTable({candidateList, electionID}) {
+function CandidateTable({candidateList, electionID, adminRoles}) {
     const [editModal, setEditModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
     const [candidate, setCandidate] = useState([])
-
+    const [roles] = useState(adminRoles)
+    // console.log(roles)
     async function findCandidate(electionID, candidateID, buttonClicked) {
         const response = await fetch(`http://localhost:5500/api/${electionID}/find_candidate_details`, {
             method: 'POST',
@@ -67,15 +68,25 @@ function CandidateTable({candidateList, electionID}) {
                             <StyledTableCell align="center">
                                 <IconButton 
                                     aria-label = "edit" 
-                                    color = "secondary" 
-                                    onClick = {(e) => {findCandidate(electionID, candidate._id, "EDIT")}}
+                                    color = "secondary"
+                                    onClick={() => {
+                                        if(roles[0] === 'readwrite' && roles[1] === 'Admin')
+                                            findCandidate(electionID, candidate._id, "EDIT")
+                                        else
+                                            alert('Only admins can add or modify candidates')
+                                    }}
                                 >
                                     <EditIcon />
                                 </IconButton>
                                 <IconButton 
                                     aria-label="delete"
                                     color="error" 
-                                    onClick={(e) => {findCandidate(electionID, candidate._id, "DELETE")}}
+                                    onClick={() => {
+                                        if(roles[0] === 'readwrite' && roles[1] === 'Admin')
+                                            findCandidate(electionID, candidate._id, "DELETE")
+                                        else
+                                            alert('Only admins can add or modify candidates')
+                                    }}
                                 >
                                     <DeleteIcon />
                                 </IconButton>
@@ -85,8 +96,8 @@ function CandidateTable({candidateList, electionID}) {
                 </TableBody>
             </Table>
         </TableContainer>
-        {editModal && <EditModal setEditModal={setEditModal} candidate={candidate} electionID={electionID}/>}
-        {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} electionID={electionID} candidateID={candidate._id} />}
+        {editModal && <EditModal setEditModal={setEditModal} candidate={candidate} electionID={electionID} roles={roles}/>}
+        {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} electionID={electionID} candidateID={candidate._id} roles={roles} />}
         </>
 
     )

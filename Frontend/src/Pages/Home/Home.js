@@ -1,5 +1,5 @@
 import React from 'react'
-import './Styles/Home.css'
+import styles from './Styles/Home.module.css'
 import { useNavigate, Link } from 'react-router-dom'
 function Home() {
 	const navigate = useNavigate();
@@ -8,37 +8,37 @@ function Home() {
 
   	return (
 		<>
-			<nav className="navbar">
-				<h1 className="logo">E-Voting Portal</h1>
-				<ul className="nav-links">
-					<li><a href="#banner" className="nav-link">Home</a></li>
-					<li><a href="#features" className="nav-link">Features</a></li>
-					<li><Link to="/user/signup" className="nav-link">Register</Link></li>
+			<nav className={styles.navbar}>
+				<h1 className={styles.logo}>E-Voting Portal</h1>
+				<ul className={styles.navLinks}>
+					<li><a href="#banner" className={styles.navLink}>Home</a></li>
+					<li><a href="#features" className={styles.navLink}>Features</a></li>
+					<li><Link to="/user/signup" className={styles.navLink}>Register</Link></li>
 					{checkLoggedIn ? 
-						<li><Link to="/user/dashboard" className="nav-link">Dashboard</Link></li>
+						<li><Link to="/user/dashboard" className={styles.navLink}>Dashboard</Link></li>
 						:
-						<li><Link to="/user/login" className="nav-link">Login</Link></li>
+						<li><Link to="/user/login" className={styles.navLink}>Login</Link></li>
 					}
 				</ul>
 			</nav>
-			<div className="banner" id="banner">
-				<h1 className="banner-heading">E-Voting Portal</h1>
-				<p className="banner-subheading">The secure and transparent way to vote</p>
-				<button className="banner-button" onClick={() => navigate('/user/signup')}>Get Started</button>
+			<div className={styles.banner} id="banner">
+				<h1 className={styles.banner_heading}>E-Voting Portal</h1>
+				<p className={styles.banner_subheading}>The secure and transparent way to vote</p>
+				<button className={styles.bannerBtn} onClick={() => navigate('/user/signup')}>Get Started</button>
 			</div>
-			<div className="features" id="features">
-				<h2 className="features-heading">Features</h2>
-				<ul className="features-list">
-					<li className="feature-item">Secure and transparent voting process</li>
-					<li className="feature-item">Immutable blockchain technology</li>
-					<li className="feature-item">Decentralized system for fair elections</li>
-					<li className="feature-item">Easy and convenient to use</li>
-					<li className="feature-item">Real-time updates and results</li>
-					<li className="feature-item">Customized Election Creation</li>
+			<div className={styles.features} id="features">
+				<h2 className={styles.features_heading}>Features</h2>
+				<ul className={styles.list}>
+					<li className={styles.listItem}>Secure and transparent voting process</li>
+					<li className={styles.listItem}>Immutable blockchain technology</li>
+					<li className={styles.listItem}>Decentralized system for fair elections</li>
+					<li className={styles.listItem}>Easy and convenient to use</li>
+					<li className={styles.listItem}>Real-time updates and results</li>
+					<li className={styles.listItem}>Customized Election Creation</li>
 				</ul>
 			</div>
-			<footer className="footer">
-				<p className="footer-text">E-Voting Web Portal &copy; 2023</p>
+			<footer className={styles.footer}>
+				<p className={styles.footer_text}>E-Voting Web Portal &copy; 2023</p>
 			</footer>
 		</>
   	)

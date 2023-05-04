@@ -2,10 +2,16 @@ import React from "react";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({setDeleteModal, electionID, candidateID}) => {
+const Modal = ({setDeleteModal, electionID, candidateID, roles}) => {
   async function deleteCandidate() {
       const response = await fetch(`http://localhost:5500/api/${electionID}/delete_candidate/${candidateID}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          roles
+        })
       });
       const data = await response.json();
       if(data.status === 'OK') {

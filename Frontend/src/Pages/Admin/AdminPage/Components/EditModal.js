@@ -3,7 +3,7 @@ import styles from './assets/Modal.module.css'
 
 import { RiCloseLine } from "react-icons/ri";
 
-function CandidateModal({setEditModal, candidate, electionID}) {
+function EditModal({setEditModal, candidate, electionID, roles}) {
     const candidateID = candidate._id;
     const [candidateName, setCandidateName] = useState(candidate.candidateName)
     const [candidateUID, setCandidateUID] = useState(candidate.candidateUID)
@@ -50,7 +50,8 @@ function CandidateModal({setEditModal, candidate, electionID}) {
                 candidateImageName,
                 candidateAge,
                 candidateDOB,
-                electionID
+                electionID,
+                roles
             })
         });
         const data = await response.json();
@@ -133,4 +134,4 @@ function CandidateModal({setEditModal, candidate, electionID}) {
   )
 }
 
-export default CandidateModal
+export default EditModal

@@ -7,6 +7,7 @@ import AdminNavbar from "./Components/AdminNavbar";
 const ChangeElectionPhase = () => {  
   const location = useLocation();
   const election = location.state?.data;
+  const roles = location.state?.adminRoles;
   const phaseMap = {
     0: "Creation phase",
     1: "Registration phase",
@@ -33,6 +34,7 @@ const ChangeElectionPhase = () => {
         electionID,
         phase,
         active,
+        roles
       })
     });
     const data = await response.json();

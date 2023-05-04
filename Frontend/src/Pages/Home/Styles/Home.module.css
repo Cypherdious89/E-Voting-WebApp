@@ -1,24 +1,3 @@
-/* .main {
-	background-color: #010110;
-	height: 100vh;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-}
-
-.title {
-	margin: 0;
-	color: #FFF;
-}
-
-.description {
-	padding: 5px 200px;
-	color: #FFF;
-	text-align: justify;
-} */
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -33,20 +12,20 @@
   margin: 0;
 }
 
-.nav-links {
+.navLinks {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.nav-link {
+.navLink {
   margin-left: 20px;
   color: #fff;
   text-decoration: none;
 }
 
-.nav-link:hover {
+.navLink:hover {
   text-decoration: underline;
 }
 
@@ -63,18 +42,18 @@
   text-align: center;
 }
 
-.banner-heading {
+.banner_heading {
   font-size: 60px;
   margin: 0;
 }
 
-.banner-subheading {
+.banner_subheading {
   font-size: 24px;
   margin-top: 20px;
   margin-bottom: 40px;
 }
 
-.banner-button {
+.bannerBtn {
   padding: 10px 20px;
   font-size: 18px;
   font-weight: bold;
@@ -86,7 +65,7 @@
   transition: background-color 0.25s ease;
 }
 
-.banner-button:hover {
+.bannerBtn:hover {
   background-color: #0069d9;
   transform: translateY(-5px);
   box-shadow: 0 10px 20px -10px rgba(24, 90, 219, 0.6);
@@ -98,12 +77,12 @@
   text-align: center;
 }
 
-.features-heading {
+.features_heading {
   font-size: 40px;
   margin: 0;
 }
 
-.features-list {
+.list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -112,7 +91,7 @@
   list-style: none;
 }
 
-.feature-item {
+.listItem {
   margin: 20px;
   padding: 20px;
   background-color: #f8f9fa;
@@ -122,7 +101,7 @@
   transition: box-shadow 0.2s ease-in-out;
 }
 
-.feature-item:hover {
+.listItem:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -136,23 +115,6 @@
   font-size: 16px;
 }
 
-.footer-text {
+.footer_text {
   margin: 0;
 }
-
-.footer-links {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* .footer-link {
-  margin-left: 20px;
-  color: #fff;
-  text-decoration: none;
-} */
-
-/* .footer-link:hover {
-  text-decoration: underline;
-} */

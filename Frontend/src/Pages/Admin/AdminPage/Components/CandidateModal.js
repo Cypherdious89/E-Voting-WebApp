@@ -2,14 +2,13 @@ import React, {useState} from 'react'
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-function CandidateModal({ setIsModalOpen, electionID }) {
+function CandidateModal({ setIsModalOpen, electionID, roles}) {
     const [candidateName, setCandidateName] = useState('')
     const [candidateUID, setCandidateUID] = useState('')
     const [candidateImage, setCandidateImage] = useState('')
     const [candidateDOB, setCandidateDOB] = useState('')
     var [candidateAge, setCandidateAge] = useState()
     var [candidateImageName, setCandidateImageName] = useState('')
-
 
     function convertToBase64(hash){
         const reader = new FileReader();
@@ -48,7 +47,8 @@ function CandidateModal({ setIsModalOpen, electionID }) {
                 candidateImageName,
                 candidateDOB,
                 candidateAge,
-                electionID
+                electionID,
+                roles
             })
         });
         const data = await response.json();

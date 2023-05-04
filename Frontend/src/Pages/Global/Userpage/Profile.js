@@ -1,31 +1,40 @@
-import React,  {useEffect, useState} from 'react'
+import React from 'react'
+import styles from '../Styles/profile.module.css'
+import userAvatar from './Components/assets/user_avatar.png'
+import UserNavbar from './Components/UserNavbar'
 
 function Profile() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [aadhar, setAadhar] = useState('');
-  const [uid, setUid] = useState('');
-
-  useEffect(() => {
-    let userDetails = sessionStorage.getItem("userDetails");
-    const userObj = JSON.parse(userDetails);
-    setName(userObj.username)
-    setEmail(userObj.email)
-    setMobileNo(userObj.mobileNumber)
-    setAadhar(userObj.aadhar)
-    setUid(userObj.uid)
-  }, [])
+  let userDetails = sessionStorage.getItem("userDetails");
+  const sessionObject = JSON.parse(userDetails);
+  const user = {
+    name: sessionObject.username,
+    email: sessionObject.email,
+    mobile: sessionObject.mobileNumber,
+    aadhar: sessionObject.aadhar,
+    uid: sessionObject.uid,
+    avatar: userAvatar,
+  }
 
   return (
     <>
-      <h1>User Profile</h1>
-      <p>Name : {name}</p>
-      <p>Email : {email}</p>
-      <p>Mobile No. : {mobileNo}</p>
-      <p>Aadhar Number : {aadhar}</p>
-      <p>Unique ID: {uid}</p>
-    </>
+        <UserNavbar />
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>{user.name}</h1>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.avatar}>
+              <img src={user.avatar} alt="admin Avatar" />
+            </div>
+            <div className={styles.details}>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Mobile No. :</strong> {user.mobile}</p>
+              <p><strong>Aadhar No. :</strong> {user.aadhar}</p>
+              <p><strong>Unique ID :</strong> {user.uid}</p>
+            </div>
+          </div>
+        </div>
+      </>
   )
 }
 

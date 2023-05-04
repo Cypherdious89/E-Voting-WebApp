@@ -1,11 +1,11 @@
 /* Style for the entire page */
-.active-election-body {
+.mainbody {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
 }
 
-.election-container {
+.listContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
@@ -15,20 +15,20 @@
 }
 
 @media (max-width: 768px) {
-  .election-container {
+  .listContainer {
     grid-template-columns: 1fr;
   }
 }
 
 /* Styles for the active elections page */
-.active-election-title {
+.title {
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
 }
 
-.election-card {
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -44,33 +44,24 @@
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.election-card:hover {
+.card:hover {
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.election-card-header {
+.header {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
 }
 
-.election-card-text {
-  font-size: 14px;
-  margin-bottom: 40px;
-  text-align: center;
-  color: #333;
-  line-height: 1.5;
-  list-style: none;
-}
-
-.election-button-container {
+.btn_container {
   margin: 20px 0 5px 0;
   display: flex;
   justify-content: space-between;
 }
 
-.election-card-button {
+.cardBtn {
   background-color: #007bff;
   border: none;
   border-radius: 5px;
@@ -82,24 +73,24 @@
   text-transform: uppercase;
 }
 
-.election-card-button:hover {
+.cardBtn:hover {
   background-color: #0062cc;
 }
 
-.election-card-button + .election-card-button {
+.cardBtn + .cardBtn {
   margin-left: 10px;
 }
 
-.election-card-button:first-child {
+.cardBtn:first-child {
   margin-right: 10px;
 }
 
-.election-card-button:last-child {
+.cardBtn:last-child {
   margin-left: 10px;
 }
 
-.election-card-button-container:before,
-.election-card-button-container:after {
+.card:before,
+.card:after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -109,40 +100,41 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.election-card-button-container:before {
+.card:before {
   background-color: #f8f8f8;
   transform: scale(1);
 }
 
-.election-card-button-container:after {
+.card:after {
   background-color: #007bff;
   transform: scale(0);
 }
 
-.election-card-button-container:hover:before {
+.btn_container:hover:before {
   transform: scale(0.9);
 }
 
-.election-card-button-container:hover:after {
+.btn_container:hover:after {
   transform: scale(1);
 }
 
-.property-grid-container {
+.grid_container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 20px;
 }
 
-.property-grid-item {
+.grid_item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.property-title {
+
+.grid_title {
   font-weight: bold;
 }
 
-.property-value {
+.grid_value {
   margin-top: 5px;
 }

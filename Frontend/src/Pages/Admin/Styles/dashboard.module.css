@@ -1,70 +1,70 @@
-.admin-dashboard-container {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.admin-navbar {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 80px;
-  /* padding: 0 40px; */
-  background-color: #ffffff;
+  height: 60px;
+  background-color: #212529;
+  color: #fff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.admin-navbar-left {
+.navbarLeft {
   display: flex;
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-  color: #333333;
+  color: #fff;
 }
 
-.admin-navbar-left img {
+.navbarLeft img {
   height: 40px;
   margin-right: 10px;
 }
 
-.admin-navbar-right {
+.navbarRight {
   display: flex;
   align-items: center;
 }
 
-.profile-avatar {
+.avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #dddddd;
+  background-color: #111;
   margin-left: 10px;
   margin-right: 20px;
 }
 
-.admin-dashboard-content {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
 }
 
-.admin-dashboard-title {
+.title {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 40px;
 }
 
-.admin-card-container {
+.cardContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
+  gap: 40px;
   width: 80%;
 }
 
-.admin-card {
+.card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,11 +78,11 @@
   transition: transform 0.2s;
 }
 
-.admin-card:hover {
+.card:hover {
   transform: scale(1.05);
 }
 
-.admin-card h2 {
+.card h2 {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -91,7 +91,7 @@
   text-decoration: none;
 }
 
-.admin-card p {
+.card p {
   font-size: 16px;
   margin-top: 10px;
   text-align: center;
@@ -103,12 +103,20 @@ a {
   text-decoration: none;
 }
 
-.logout-button{
-  padding: 10px;
+.logoutBtn{
+  padding: 8px;
+  /* bacolor: #111; */
+  color: #ffffff;
   border-radius: 20px;
 }
 
-.logout-button:hover {
-  background-color: #EEE;
-  transition: 0.1s ease-in;
+.logoutBtn:visited{
+  color: #eee;
+  text-decoration: none;
+}
+
+.logoutBtn:hover {
+  color: #111;
+  background-color: #fff;
+  transition: 0.2s ease-in;
 }

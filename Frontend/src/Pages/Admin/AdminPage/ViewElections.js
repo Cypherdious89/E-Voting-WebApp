@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "../Styles/active_elections.css";
+import { Link, useLocation } from "react-router-dom";
+// import { useLocation } from 'react-router-dom';
+import styles from "../Styles/view_elections.module.css";
 import AdminNavbar from "./Components/AdminNavbar";
 
 function ViewElections() {
   const [electionList, setElectionList] = useState([]);
+  const location = useLocation();
+  const roles = location.state?.data
 
   const phaseMap = {
     0: "Creation phase",
@@ -27,55 +30,58 @@ function ViewElections() {
 
   const PropertiesGrid = ({ election }) => {
     const properties = [
-      {title: "Department", value: election.area},
-      {title: "Candidates", value: election.maxCandidate},
-      {title: "Seats", value: election.maxVoteCount},
-      {title: "Phase", value: phaseMap[election.phase]},
-      {title: "Status", value: election.active === true? "Active" : "Closed"},
-    ]
+      { title: "Department", value: election.area },
+      { title: "Candidates", value: election.maxCandidate },
+      { title: "Seats", value: election.maxVoteCount },
+      { title: "Phase", value: phaseMap[election.phase] },
+      {
+        title: "Status",
+        value: election.active === true ? "Active" : "Closed",
+      },
+    ];
 
     return (
-      <div className="property-grid-container">
-      {properties.map((property, index) => (
-        <div key={index} className="property-grid-item">
-          <div className="property-title">{property.title}</div>
-          <div className="property-value">{property.value}</div>
-        </div>
-      ))}
-    </div>
+      <div className={styles.grid_container}>
+        {properties.map((property, index) => (
+          <div key={index} className={styles.grid_item}>
+            <div className={styles.grid_title}>{property.title}</div>
+            <div className={styles.grid_value}>{property.value}</div>
+          </div>
+        ))}
+      </div>
     );
-  }
+  };
 
   const ElectionCard = ({ election }) => {
     return (
-      <div className="election-card">
-        <div className="election-card-header">{election.title}</div>
-        <div className="election-card-body">
-            <PropertiesGrid election={election} />
-            <div className="election-button-container">
-              <Link
-                to={`/admin/elections/${election._id}/candidates`}
-                state={{ data: { ...election } }}
-              >
-                <button className="election-card-button">Candidate List</button>
-              </Link>
-              <Link
-                to={`/admin/elections/${election._id}/edit`}
-                state={{ data: { ...election } }}
-              >
-                <button className="election-card-button">
-                  Modify Election Details
-                </button>
-              </Link>
-              <Link
-                to={`/admin/elections/${election._id}/phase`}
-                state={{ data: { ...election } }}
-              >
-                <button className="election-card-button">
-                  Change Election Phases
-                </button>
-              </Link>
-            </div>
+      <div className={styles.card}>
+        <div className={styles.header}>{election.title}</div>
+        <div className={styles.body}>
+          <PropertiesGrid election={election} />
+          <div className={styles.btn_container}>
+            <Link
+              to={`/admin/elections/${election._id}/candidates`}
+              state={{data: {...election}, adminRoles: roles}}
+            >
+              <button className={styles.cardBtn}>Candidate List</button>
+            </Link>
+            <Link
+              to={`/admin/elections/${election._id}/edit`}
+              state={{data: {...election}, adminRoles: roles}}
+            >
+              <button className = {styles.cardBtn}>
+                Modify Election Details
+              </button>
+            </Link>
+            <Link
+              to={`/admin/elections/${election._id}/phase`}
+              state={{data: {...election}, adminRoles: roles}}
+            >
+              <button className={styles.cardBtn}>
+                Change Election Phases
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -83,7 +89,7 @@ function ViewElections() {
 
   const ElectionList = () => {
     return (
-      <div className="election-container">
+      <div className={styles.listContainer}>
         {electionList?.map((election) => (
           <ElectionCard key={election._id} election={election} />
         ))}
@@ -93,8 +99,8 @@ function ViewElections() {
   return (
     <>
       <AdminNavbar />
-      <div className="active-election-body">
-        <h1 className="active-election-title">Active Elections</h1>
+      <div className={styles.mainbody}>
+        <h1 className={styles.title}>Active Elections</h1>
         <ElectionList electionList={electionList} />
       </div>
     </>

@@ -9,6 +9,7 @@ function EditElection() {
 
   const location = useLocation();
   const election = location.state?.data
+  const roles = location.state?.adminRoles
 
   const [title, setTitle] = useState(election.title);
   const [dept, setDept] = useState(election.area);
@@ -34,7 +35,8 @@ function EditElection() {
         maxCandidate,
         maxVoters,
         maxVoteCount,
-        ageRestriction
+        ageRestriction,
+        roles
       })
     });
 

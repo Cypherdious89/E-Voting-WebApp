@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import NavLogo from './assets/vote.png'
+import NavLogo from './assets/vote.png';
 import styles from '../../Styles/dashboard.module.css';
 import { Avatar, Tooltip } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
@@ -19,9 +19,9 @@ function AdminNavbar() {
             </div>
             <div className={styles.navbarRight}>
                 <Link onClick={()=>handleLogout()} className={styles.logoutBtn}>Logout</Link>
-                <Link to="/admin/profile">
+                <Link to="/user/profile">
                     <div className={styles.avatar}>
-                        <Tooltip title='Admin Profile' arrow>
+                        <Tooltip title='User Profile' arrow>
                             <Avatar sx={{ color: 'black', bgcolor: 'white' }}>
                                 <PersonIcon />
                             </Avatar>
