@@ -5,7 +5,7 @@ import styles from '../../Styles/dashboard.module.css';
 import { Avatar, Tooltip } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 
-function AdminNavbar() {
+function AdminNavbar({adminRoles}) {
     const handleLogout = () => {
         window.localStorage.clear();
         window.sessionStorage.clear()
@@ -20,7 +20,7 @@ function AdminNavbar() {
             </div>
             <div className={styles.navbarRight}>
                 <Link onClick={()=>handleLogout()} className={styles.logoutBtn}>Logout</Link>
-                <Link to="/admin/profile">
+                <Link to="/admin/profile" state={{adminRoles: adminRoles}}>
                     <div className={styles.avatar}>
                         <Tooltip title='Admin Profile' arrow>
                             <Avatar sx={{ color: 'black', bgcolor: 'white' }}>

@@ -50,9 +50,9 @@ app.post('/api/signup', async (req, res) => {
             aadhar: req.body.aadhar,
             uid: req.body.uid
         })
-        res.json({'status' :'OK!'});
+        res.json({'status' :'OK', message: 'User created successfully. Login to Continue...'});
     } catch(err){
-        res.json({status: 'error', error:'Duplicate Email'})
+        res.json({status: 'error', message:'User already exists'})
     }
 })
 
@@ -76,10 +76,11 @@ app.post('/api/login', async (req, res) => {
             username : user.username,
             email : user.email
         }, "VGhpc0lzVGhlTG9naW5TZWNyZXQ=")
-        return res.json({status: 'OK', user: userToken, details: userDetails});
+        return res.json({status: 'OK', user: userToken, details: userDetails, message: 'Login successful'});
     }
-    else
-        return res.json({status: 'error', user: false, message: "Invalid username or email !"});
+    else{
+        return res.json({status: 'error', user: false, message: "Invalid Credentials, Please try again !"});
+    }
 })
 
 //? Admin Login route

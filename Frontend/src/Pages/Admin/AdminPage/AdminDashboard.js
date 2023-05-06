@@ -6,7 +6,7 @@ import AdminNavbar from './Components/AdminNavbar'
 
 function AdminDashboard() {
     const navigate = useNavigate();
-    var { setAdminRoles } = useState([]);
+    var [ adminRoles, setAdminRoles ] = useState([]);
     const accessRef = useRef(null);
     const rolesRef = useRef(null);
 
@@ -29,7 +29,7 @@ function AdminDashboard() {
             rolesRef.current = admin.role;
             if(!admin){
                 localStorage.removeItem(adminToken);
-                navigate('/admin/login')
+                navigate('/')
             } else {
                 populateAdmin();
                 const adminRoles = [accessRef.current, rolesRef.current];
@@ -37,15 +37,11 @@ function AdminDashboard() {
                 sessionStorage.setItem("adminRoles", JSON.stringify(adminRoles));
             }
         }
-    }, [navigate, setAdminRoles])
-
-    // const role = sessionStorage.getItem("adminRoles")
-    // const roles = JSON.parse(role)
-    // console.log(roles)
+    }, [navigate])
 
     return (
         <div className={styles.container}>
-            <AdminNavbar />
+            <AdminNavbar adminRoles={adminRoles} />
             <div className={styles.content}>
                 <h1 className={styles.title}>Welcome to Admin Dashboard</h1>
                 <div className={styles.cardContainer}>
