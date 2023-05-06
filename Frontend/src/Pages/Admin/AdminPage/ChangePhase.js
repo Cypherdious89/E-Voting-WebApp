@@ -1,13 +1,16 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 import styles from '../Styles/phase.module.css'
 import AdminNavbar from "./Components/AdminNavbar";
-// import { Button } from "@mui/material";
 
 const ChangeElectionPhase = () => {  
+  const navigate = useNavigate();
   const location = useLocation();
   const election = location.state?.data;
-  const roles = location.state?.adminRoles;
+  const roles = sessionStorage.getItem("adminRoles");
+  const adminRoles = JSON.parse(roles);
+
+  
   const phaseMap = {
     0: "Creation phase",
     1: "Registration phase",
@@ -17,6 +20,7 @@ const ChangeElectionPhase = () => {
     5: "Election end",
   };
   const status = election.active === true ? "Active" : "Closed";
+  const type = election.open === true ? "open" : "closed";
   const electionID = election._id;
   let phase = election.phase, active = election.active;
 
@@ -34,13 +38,13 @@ const ChangeElectionPhase = () => {
         electionID,
         phase,
         active,
-        roles
+        adminRoles
       })
     });
     const data = await response.json();
     if (data.status === 'OK') {
       alert('Successfully updated Election Phase !');
-      window.location.href = `/admin/elections`
+      navigate('/admin/elections/view/'+type)
     } else {
       alert('Some error occurred, please try again !')
     }

@@ -1,15 +1,18 @@
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import styles from './assets/Modal.module.css'
-
 import { RiCloseLine } from "react-icons/ri";
 
-function EditModal({setEditModal, candidate, electionID, roles}) {
+function EditModal({setEditModal, candidate, electionID}) {
+    const navigate = useNavigate();
     const candidateID = candidate._id;
-    const [candidateName, setCandidateName] = useState(candidate.candidateName)
-    const [candidateUID, setCandidateUID] = useState(candidate.candidateUID)
-    const [candidateImage, setCandidateImage] = useState(candidate.candidatePhoto)
-    const [candidateDOB, setCandidateDOB] = useState(candidate.candidateDOB)
-    var [candidateAge, setCandidateAge] = useState(candidate.candidateAge)
+    const roles = sessionStorage.getItem("adminRoles");
+    const adminRoles = JSON.parse(roles);
+    const [candidateName, setCandidateName] = useState(candidate.Name)
+    const [candidateUID, setCandidateUID] = useState(candidate.UID)
+    const [candidateImage, setCandidateImage] = useState(candidate.Photo)
+    const [candidateDOB, setCandidateDOB] = useState(candidate.DOB)
+    var [candidateAge, setCandidateAge] = useState(candidate.Age)
     var [candidateImageName, setCandidateImageName] = useState()
 
     function convertToBase64(hash) {
@@ -51,17 +54,21 @@ function EditModal({setEditModal, candidate, electionID, roles}) {
                 candidateAge,
                 candidateDOB,
                 electionID,
-                roles
+                adminRoles
             })
         });
         const data = await response.json();
         if (data.status === 'OK') {
-            alert('Successfully modified candidate details !');
-            setEditModal(false);
-            window.location.href = `/admin/elections/${electionID}/candidates`
+          alert("Successfully modified candidate details !");
+          setEditModal(false);
+
+          navigate(`/admin/elections/${electionID}/candidates`, {
+            state: { data: { ...data.election } },
+          });
         } else {
             alert('Some error occurred, please try again !')
         }
+        window.location.reload();
     }
     return (
     <>

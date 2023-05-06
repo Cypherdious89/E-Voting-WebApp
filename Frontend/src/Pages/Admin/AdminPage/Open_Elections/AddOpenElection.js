@@ -1,75 +1,78 @@
-import React from 'react'
 import {Avatar, Button,TextField, Box, Typography, Container, FormGroup, FormControlLabel, Switch} from "@mui/material";
 import PollRoundedIcon from '@mui/icons-material/PollRounded';
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-
-function EditElection() {
-
-  const location = useLocation();
-  const election = location.state?.data
-  const roles = location.state?.adminRoles
-
-  const [title, setTitle] = useState(election.title);
-  const [dept, setDept] = useState(election.area);
-  const [maxCandidate, setMaxCandidate] = useState(election.maxCandidate);
-  const [maxVoters, setMaxVoters] = useState(election.maxVoter);
-  const [maxVoteCount, setMaxVoteCount] = useState(election.maxVoteCount);
-  const [ageRestriction, setAgeRestriction] =useState(election.ageRestriction);
-
+function AddOpenElection() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [area, setArea] = useState('');
+  const [code, setCode] = useState('');
+  const [maxCandidates, setMaxCandidates] = useState('');
+  const [maxVoters, setMaxVoters] = useState('');
+  const [maxWinners, setMaxWinners] = useState('');
+  const [ageRestriction, setAgeRestriction] =useState(false);
   const min_candidates = 1, max_candidates = 100;
   const min_voters = 1, max_voters = 99999999;
   const min_winners = 1, max_winners = 10;
+  const navigate = useNavigate();
+  const roles = sessionStorage.getItem("adminRoles");
+  const adminRoles = JSON.parse(roles);
 
-  async function EditElection(event) {
+
+  const handleKeyDown = (e) => {
+    if (/[0-9]/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  async function AddElectiontoDB(event) {
     event.preventDefault();
-    const response = await fetch(`http://localhost:5500/api/${election._id}/edit_election_details`, {
+    const response = await fetch('http://localhost:5500/api/add_open_election_data', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         title,
-        dept,
-        maxCandidate,
+        description,
+        area,
+        code,
+        maxCandidates,
         maxVoters,
-        maxVoteCount,
+        maxWinners,
         ageRestriction,
-        roles
+        adminRoles
       })
     });
 
     const data = await response.json();
     if (data.status === 'OK') {
-      alert('Successfully modified election details !');
-      window.location.href = '/admin/elections'
+      alert('Successfully added election details !');
+      navigate(`/admin/elections/open/${data.election._id}/addCandidates`, {
+        state: { data: { ...data.election } },
+      });
     } else {
       alert('Some error occurred, please try again !')
     }
   }
 
   return (
-    <Container component="main" maxWidth="md">
-        <Box
-            sx={{
-                boxShadow: 3,
-                borderRadius: 2,
-                px: 4,
-                py: 4,
-                marginTop: 5,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
+    <>
+      <Container component="main" maxWidth="md">
+        <Box sx={{
+              boxShadow: 3,
+              borderRadius: 2,
+              px: 2, py: 2,
+              mx: 2, my: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+          }}
         >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            < PollRoundedIcon / >
-        </Avatar>
-        <Typography component="h1" variant="h5">
-            Add Election
-        </Typography>
-        <Box component = "form" onSubmit = {EditElection} noValidate sx = {{mt: 1}} >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><PollRoundedIcon /></Avatar>
+          <Typography component="h1" variant="h5">Add Open Election</Typography>
+          <Box component = "form" onSubmit = {AddElectiontoDB} noValidate sx = {{mt: 1}} >
             <TextField
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -81,26 +84,47 @@ function EditElection() {
                 margin="normal"
             />
             <TextField
-                value={dept}
-                onChange={(e) => setDept(e.target.value)}
-                name = "department" required fullWidth
-                id="department"
-                label="Department"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                name = "description" required fullWidth
+                id="description"
+                label="Election Description"
+                type="text"
+                margin="normal"
+            />
+            <TextField
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                name = "area" required fullWidth
+                id="area"
+                label="Area"
                 type="text"
                 margin="normal"
                 autoComplete="false"
             />
             <TextField
-                value={maxCandidate}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                name = "code" required fullWidth
+                id="code"
+                label="ID Matching Code"
+                type="text"
+                margin="normal"
+                autoComplete="false"
+                inputProps={{maxLength: 3}}
+                onKeyDown={handleKeyDown}
+            />
+            <TextField
+                value={maxCandidates}
                 onChange = {
                   (e) => {
                     var val = parseInt(e.target.value, 10);
                     if (val > max_candidates) val = max_candidates;
                     if (val < min_candidates) val = min_candidates;
-                    setMaxCandidate(val);
+                    setMaxCandidates(val);
                   }
                 }
-                name = "maxCandidate" required fullWidth
+                name = "maxCandidates" required fullWidth
                 id = "maxCandidate"
                 label="Maximum Candidate Count"
                 InputProps={{ inputProps: { type: 'number', min: min_candidates, max: max_candidates } }}
@@ -123,13 +147,13 @@ function EditElection() {
                 margin="normal"
             />
             <TextField
-                value={maxVoteCount}
+                value={maxWinners}
                 onChange = {
                   (e) => {
                     var val = parseInt(e.target.value, 10);
                     if (val > max_winners) val = max_winners;
                     if (val < min_winners) val = min_winners;
-                    setMaxVoteCount(val);
+                    setMaxWinners(val);
                   }
                 }
                 name = "maxVoteCount" required fullWidth
@@ -155,12 +179,13 @@ function EditElection() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-              Edit Election Details
+              Add Election
             </Button>
-            </Box>
+          </Box>
         </Box>
     </Container>
+    </>
   )
 }
 
-export default EditElection
+export default AddOpenElection

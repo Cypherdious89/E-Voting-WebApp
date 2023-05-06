@@ -7,7 +7,6 @@ function AdminProtectedRoute({Component}) {
     useEffect(() => {
         let loggedIn = localStorage.getItem('adminToken')
         const admin = decodeToken(loggedIn);
-        // console.log(admin)
         if (!loggedIn) {
             navigate('/')
             alert("You are not authorized to access this page !")

@@ -17,12 +17,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-function CandidateTable({candidateList, electionID, adminRoles}) {
+function CandidateTable({candidateList, electionID}) {
     const [editModal, setEditModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
     const [candidate, setCandidate] = useState([])
-    const [roles] = useState(adminRoles)
-    // console.log(roles)
+    const roles = sessionStorage.getItem("adminRoles");
+    const adminRoles = JSON.parse(roles);
+
     async function findCandidate(electionID, candidateID, buttonClicked) {
         const response = await fetch(`http://localhost:5500/api/${electionID}/find_candidate_details`, {
             method: 'POST',
@@ -60,17 +61,17 @@ function CandidateTable({candidateList, electionID, adminRoles}) {
                     {candidateList?.map((candidate) => (
                         <StyledTableRow key = {candidate._id}>
                             <StyledTableCell component="th" scope="row">
-                                <img  alt="Candidate Phtoto" width={100} height={100} src={candidate.candidatePhoto.file}/>
+                                <img  alt="Candidate Phtoto" width={100} height={100} src={candidate.Photo.file}/>
                             </StyledTableCell>
-                            <StyledTableCell align="center">{candidate.candidateName}</StyledTableCell>
-                            <StyledTableCell align="center">{candidate.candidateUID}</StyledTableCell>
-                            <StyledTableCell align="center">{candidate.candidateAge}</StyledTableCell>
+                            <StyledTableCell align="center">{candidate.Name}</StyledTableCell>
+                            <StyledTableCell align="center">{candidate.UID}</StyledTableCell>
+                            <StyledTableCell align="center">{candidate.Age}</StyledTableCell>
                             <StyledTableCell align="center">
                                 <IconButton 
                                     aria-label = "edit" 
                                     color = "secondary"
                                     onClick={() => {
-                                        if(roles[0] === 'readwrite' && roles[1] === 'Admin')
+                                        if(adminRoles[0] === 'readwrite' && adminRoles[1] === 'Admin')
                                             findCandidate(electionID, candidate._id, "EDIT")
                                         else
                                             alert('Only admins can add or modify candidates')
@@ -82,7 +83,7 @@ function CandidateTable({candidateList, electionID, adminRoles}) {
                                     aria-label="delete"
                                     color="error" 
                                     onClick={() => {
-                                        if(roles[0] === 'readwrite' && roles[1] === 'Admin')
+                                        if(adminRoles[0] === 'readwrite' && adminRoles[1] === 'Admin')
                                             findCandidate(electionID, candidate._id, "DELETE")
                                         else
                                             alert('Only admins can add or modify candidates')
@@ -96,8 +97,8 @@ function CandidateTable({candidateList, electionID, adminRoles}) {
                 </TableBody>
             </Table>
         </TableContainer>
-        {editModal && <EditModal setEditModal={setEditModal} candidate={candidate} electionID={electionID} roles={roles}/>}
-        {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} electionID={electionID} candidateID={candidate._id} roles={roles} />}
+        {editModal && <EditModal setEditModal={setEditModal} candidate={candidate} electionID={electionID} />}
+        {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} electionID={electionID} candidateID={candidate._id} />}
         </>
 
     )

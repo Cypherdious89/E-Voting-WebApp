@@ -18,9 +18,10 @@ const adminAccessCode = "AdminLogin@2580_IIITA"; //! Admin Access Code
 
 function checkAdminReadWrite(req, res, next) {
     console.log("Checking admin access")
-    const isAdmin = req.body.roles[1] === 'Admin';
-    const hasReadWrite = req.body.roles[0] === 'readwrite';
+    const isAdmin = req.body.adminRoles[1] === 'Admin';
+    const hasReadWrite = req.body.adminRoles[0] === 'readwrite';
     if (isAdmin && hasReadWrite) {
+        console.log("Admin access approved !")
         // User has the necessary permissions, so allow them to continue
         next();
     } else {
@@ -103,8 +104,9 @@ app.post('/api/admin_login', async (req, res) => {
             role: admin.roles[1],
         }, "QWRtaW5Mb2dpbg==")
         return res.json({status: 'OK!', admin: adminToken, details: adminDetails});
-    } else
+    } else {
         return res.json({status: 'error', user: false, message: "Invalid username or email !"});
+    }
 })
 
 //! Dashboard Routes
@@ -122,6 +124,7 @@ app.get('/api/user', async (req, res) => {
 
     } 
     catch (error) {
+        console.log(error)
         res.json({status: 'error', error: error})
     }
 })
@@ -139,24 +142,29 @@ app.get('/api/admin', async (req, res) => {
             return res.json({status: 'error'})
     } 
     catch (error) {
+        console.log(error)
         res.json({status: 'error', error: error})
     }
 })
 
 //! Election Functionality Routes
+//* Open Elections
 //? Add Election Route
-app.post('/api/add_election_data', checkAdminReadWrite, async (req, res) => {
-    // console.log(req.body)
+app.post('/api/add_open_election_data', checkAdminReadWrite, async (req, res) => {
     try {
-        await Election.create({
+        const newElection = await Election.create({
+            open: true,
             title: req.body.title,
-            area: req.body.dept,
-            maxCandidate: req.body.maxCandidate,
+            description: req.body.description,
+            area: req.body.area,
+            constraints: [req.body.code],
+            maxCandidates: req.body.maxCandidates,
             maxVoter: req.body.maxVoters,
-            maxVoteCount: req.body.maxVoteCount,
+            maxWinners: req.body.maxWinners,
             ageRestriction: req.body.ageRestriction,
+            active: true,
         })
-        res.json({'status': 'OK!'});
+        res.json({'status': 'OK', election: newElection});
     }
     catch (err) {
         console.log(err)
@@ -165,23 +173,27 @@ app.post('/api/add_election_data', checkAdminReadWrite, async (req, res) => {
 })
 
 //? Modify Election Details
-app.post('/api/:_id/edit_election_details', checkAdminReadWrite, async(req, res) => {
+app.post('/api/:_id/edit_open_election', checkAdminReadWrite, async(req, res) => {
     const electionID = req.params._id
     try {
         const filter = {_id: new ObjectID(`${electionID}`)};
         const update = {
             $set: {
                 title: req.body.title,
-                area: req.body.dept,
-                maxCandidate: req.body.maxCandidate,
+                description: req.body.description,
+                area: req.body.area,
+                constraints: [req.body.code],
+                maxCandidates: req.body.maxCandidates,
                 maxVoter: req.body.maxVoters,
-                maxVoteCount: req.body.maxVoteCount,
+                maxWinners: req.body.maxWinners,
                 ageRestriction: req.body.ageRestriction,
             }
         };
         const result = await Election.updateOne(filter, update);
-        console.log(result);
-        res.send({status: 'OK'})
+        console.log("Items matched : ", result.matchedCount);
+        console.log("Items modified : ", result.modifiedCount);
+        const updatedElections = await Election.findOne(filter);
+        res.send({status: 'OK', election: updatedElections})
     }
     catch(err) {
         console.log(err);
@@ -190,9 +202,73 @@ app.post('/api/:_id/edit_election_details', checkAdminReadWrite, async(req, res)
 })
 
 //? Show all ongoing elections
-app.get('/api/get_election_data', async (req, res) => {
+app.get('/api/get_open_election_data', async (req, res) => {
     try {
-        const getElectionList = await Election.find({active: {$all : true}})
+        const getElectionList = await Election.find({active: {$all : true}, open: {$all : true}})
+        res.send({status: 'OK!', data: getElectionList});
+    } 
+    catch (err) {
+        console.log(err);
+        return res.json({status: 'error'});
+    }
+})
+
+//* Closed Elections
+//? Add Election Route
+app.post('/api/add_closed_election_data', checkAdminReadWrite, async (req, res) => {
+    try {
+        const newElection = await Election.create({
+            open: false,
+            title: req.body.title,
+            description: req.body.description,
+            department: req.body.department,
+            constraints: [req.body.branch, req.body.year, req.body.maxVoters],
+            maxCandidates: req.body.maxCandidates,
+            maxVoter: req.body.maxVoters,
+            maxWinners: req.body.maxWinners,
+            active: true,
+        })
+        res.json({'status': 'OK', election: newElection});
+    }
+    catch (err) {
+        console.log(err)
+        res.json({status: 'error'})
+    }
+})
+
+
+//? Modify Election Details - Closed
+app.post('/api/:_id/edit_closed_election', checkAdminReadWrite, async(req, res) => {
+    const electionID = req.params._id
+    try {
+        const filter = {_id: new ObjectID(`${electionID}`)};
+        const update = {
+            $set: {
+                title: req.body.title,
+                description: req.body.description,
+                department: req.body.department,
+                constraints: [req.body.branch, req.body.year, req.body.maxVoters],
+                maxCandidates: req.body.maxCandidates,
+                maxVoter: req.body.maxVoters,
+                maxWinners: req.body.maxWinners,
+            }
+        };
+        const result = await Election.updateOne(filter, update);
+        console.log("Items matched : ", result.matchedCount);
+        console.log("Items modified : ", result.modifiedCount);
+        const updatedElections = await Election.findOne(filter);
+        res.send({status: 'OK', election: updatedElections});
+    }
+    catch(err) {
+        console.log(err);
+        res.send({starus: 'error', data: err})
+    }
+})
+
+//? Show all ongoing closed elections
+app.get('/api/get_closed_election_data', async (req, res) => {
+    try {
+        const getElectionList = await Election.find({active: {$all : true}, open: {$all : false}})
         res.send({status: 'OK!', data: getElectionList});
     } 
     catch (err) {
@@ -233,21 +309,24 @@ app.put('/api/change_election_phase', checkAdminReadWrite, async(req, res) => {
 app.post('/api/add_candidate', checkAdminReadWrite, async(req, res) => {
     try {
         const candidateDetails = {
-            candidateName: req.body.candidateName,
-            candidateAge: req.body.candidateAge,
-            candidatePhoto: {
+            Name: req.body.candidateName,
+            Age: req.body.candidateAge,
+            Photo: {
                 name: req.body.candidateImageName,
                 file: req.body.candidateImage,
                 uploadTime: new Date()
             },
-            candidateUID: req.body.candidateUID,
-            candidateDOB: req.body.candidateDOB
+            UID: req.body.candidateUID,
+            DOB: req.body.candidateDOB
         }
 
         const filter = {_id: new ObjectID(`${req.body.electionID}`)};
         const update = {$push: {candidates: candidateDetails}};
         const result = await Election.updateOne(filter, update);
-        res.send({status: 'OK'});
+        console.log("Items matched : ", result.matchedCount);
+        console.log("Items modified : ", result.modifiedCount);
+        const updatedElections = await Election.findOne(filter)
+        res.send({status: 'OK', election: updatedElections, candidate: candidateDetails});
     } 
     catch (err) {
         console.log(err);
@@ -259,23 +338,23 @@ app.post('/api/add_candidate', checkAdminReadWrite, async(req, res) => {
 app.post('/api/:_id/edit_candidate_details', checkAdminReadWrite, async(req, res) => {
     const electionID = req.params._id, candidateID = req.body.candidateID;
     try {
-        const query = await Election.findOneAndUpdate(
+        const updatedElections = await Election.findOneAndUpdate(
             {_id: new ObjectID(`${electionID}`), 'candidates._id': new ObjectID(`${candidateID}`)},
             {$set: {
-                'candidates.$.candidateName': req.body.candidateName,
-                'candidates.$.candidateAge': req.body.candidateAge,
-                'candidates.$.candidatePhoto': {
+                'candidates.$.Name': req.body.candidateName,
+                'candidates.$.Age': req.body.candidateAge,
+                'candidates.$.Photo': {
                     name: req.body.candidateImageName,
                     file: req.body.candidateImage,
                     uploadTime: new Date()
                 },
-                'candidates.$.candidateUID': req.body.candidateUID,
-                'candidates.$.candidateAge' : req.body.candidateAge,
-                'candidates.$.candidateDOB' : req.body.candidateDOB
+                'candidates.$.UID': req.body.candidateUID,
+                'candidates.$.Age' : req.body.candidateAge,
+                'candidates.$.DOB' : req.body.candidateDOB
             }},
             {new: true}
         ).exec()
-        res.send({status: 'OK'});
+        res.send({status: 'OK', election: updatedElections});
     }
     catch (err) {
         console.log(err);
@@ -325,7 +404,10 @@ app.delete('/api/:election_id/delete_candidate/:candidate_id', checkAdminReadWri
         const filter = {_id: electionID};
         const update = {$pull : {candidates: {_id: candidateID}}};
         const result = await Election.updateOne(filter, update);
-        return res.json({status: "OK", message: "Candidate Deleted Successfully !"})
+        console.log("Items matched : ", result.matchedCount);
+        console.log("Items modified : ", result.modifiedCount);
+        const updatedElections = await Election.findOne(filter);
+        return res.json({status: "OK", election: updatedElections, message: "Candidate Deleted Successfully !"})
     }
     catch (err){
         console.log(err);

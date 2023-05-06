@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-// import { useLocation } from 'react-router-dom';
-import styles from "../Styles/view_elections.module.css";
-import AdminNavbar from "./Components/AdminNavbar";
+import React, { useState, useEffect} from "react";
+import { Link } from "react-router-dom";
+import styles from "../../Styles/view_elections.module.css";
+import AdminNavbar from "../Components/AdminNavbar";
 
 function ViewElections() {
   const [electionList, setElectionList] = useState([]);
-  const location = useLocation();
-  const roles = location.state?.data
-
+ 
   const phaseMap = {
     0: "Creation phase",
     1: "Registration phase",
@@ -19,7 +16,7 @@ function ViewElections() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5500/api/get_election_data", {
+    fetch("http://localhost:5500/api/get_open_election_data", {
       method: "GET",
     })
       .then((res) => res.json())
@@ -30,9 +27,9 @@ function ViewElections() {
 
   const PropertiesGrid = ({ election }) => {
     const properties = [
-      { title: "Department", value: election.area },
-      { title: "Candidates", value: election.maxCandidate },
-      { title: "Seats", value: election.maxVoteCount },
+      { title: "Area", value: election.area },
+      { title: "Candidates", value: election.maxCandidates },
+      { title: "Seats", value: election.maxWinners },
       { title: "Phase", value: phaseMap[election.phase] },
       {
         title: "Status",
@@ -57,17 +54,18 @@ function ViewElections() {
       <div className={styles.card}>
         <div className={styles.header}>{election.title}</div>
         <div className={styles.body}>
+          <h4 className={styles.description}>{election.description}</h4>
           <PropertiesGrid election={election} />
           <div className={styles.btn_container}>
             <Link
               to={`/admin/elections/${election._id}/candidates`}
-              state={{data: {...election}, adminRoles: roles}}
+              state={{data: {...election}}}
             >
               <button className={styles.cardBtn}>Candidate List</button>
             </Link>
             <Link
-              to={`/admin/elections/${election._id}/edit`}
-              state={{data: {...election}, adminRoles: roles}}
+              to={`/admin/elections/edit/open/${election._id}`}
+              state={{data: {...election}}}
             >
               <button className = {styles.cardBtn}>
                 Modify Election Details
@@ -75,7 +73,7 @@ function ViewElections() {
             </Link>
             <Link
               to={`/admin/elections/${election._id}/phase`}
-              state={{data: {...election}, adminRoles: roles}}
+              state={{data: {...election}}}
             >
               <button className={styles.cardBtn}>
                 Change Election Phases
@@ -100,7 +98,7 @@ function ViewElections() {
     <>
       <AdminNavbar />
       <div className={styles.mainbody}>
-        <h1 className={styles.title}>Active Elections</h1>
+        <h1 className={styles.title}>Active Open Elections</h1>
         <ElectionList electionList={electionList} />
       </div>
     </>

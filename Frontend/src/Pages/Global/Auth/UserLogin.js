@@ -1,13 +1,20 @@
 import {Avatar, Button,TextField, Grid, Box, Typography, Container} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 
 export default function LogIn() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
     
+    const handleKeyDown = (e) => {
+      if (!/[0-9]/.test(e.key)) {
+        e.preventDefault();
+      }
+    };
+
     async function loginUser(event) {
         event.preventDefault();
         const response = await fetch('http://localhost:5500/api/login', {
@@ -26,7 +33,7 @@ export default function LogIn() {
             localStorage.setItem('userToken', data.user)
             sessionStorage.setItem("userDetails", JSON.stringify(data.details));
             alert('Login successful !');
-            window.location.href = '/user/dashboard'
+            navigate('/user/dashboard')
         } else {
             alert('Invalid credentials, please try again !')
         }
@@ -77,7 +84,7 @@ export default function LogIn() {
                 name = "mobile" required fullWidth
                 id = "mobile"
                 label="Mobile No."
-                onKeyPress={(e) => {if (!/[0-9]/.test(e.key)) {e.preventDefault();}}}
+                onKeyDown={handleKeyDown}
                 inputProps={{ maxLength: 10 }}
                 margin="normal"
             />

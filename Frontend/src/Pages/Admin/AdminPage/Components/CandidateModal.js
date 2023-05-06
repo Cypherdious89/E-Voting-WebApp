@@ -1,8 +1,13 @@
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router';
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-function CandidateModal({ setIsModalOpen, electionID, roles}) {
+function CandidateModal({ setIsModalOpen, election, open}) {
+    const navigate = useNavigate();
+    const electionID = election._id;
+    const roles = sessionStorage.getItem("adminRoles");
+    const adminRoles = JSON.parse(roles);
     const [candidateName, setCandidateName] = useState('')
     const [candidateUID, setCandidateUID] = useState('')
     const [candidateImage, setCandidateImage] = useState('')
@@ -48,17 +53,25 @@ function CandidateModal({ setIsModalOpen, electionID, roles}) {
                 candidateDOB,
                 candidateAge,
                 electionID,
-                roles
+                adminRoles
             })
         });
         const data = await response.json();
         if (data.status === 'OK') {
             alert('Successfully added candidate details !');
             setIsModalOpen(false);
-            window.location.href = `/admin/elections/${electionID}/candidates`
+            if(open)
+                navigate(`/admin/elections/open/${electionID}/addCandidates`, {
+                    state: {data: {...data.election}}
+                });
+            else
+                navigate(`/admin/elections/closed/${electionID}/addCandidates`, {
+                    state: {data: {...data.election}}
+                });
         } else {
             alert('Some error occurred, please try again !')
         }
+        window.location.reload();
     }
 
     return (

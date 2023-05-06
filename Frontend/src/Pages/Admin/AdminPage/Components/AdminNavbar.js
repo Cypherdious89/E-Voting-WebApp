@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 function AdminNavbar() {
     const handleLogout = () => {
         window.localStorage.clear();
+        window.sessionStorage.clear()
         window.location.href = '/'
         alert("Successfully Logged Out !")
     };

@@ -1,8 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({setDeleteModal, electionID, candidateID, roles}) => {
+const Modal = ({setDeleteModal, electionID, candidateID}) => {
+  const navigate = useNavigate();
+  const roles = sessionStorage.getItem("adminRoles");
+  const adminRoles = JSON.parse(roles);
+
   async function deleteCandidate() {
       const response = await fetch(`http://localhost:5500/api/${electionID}/delete_candidate/${candidateID}`, {
         method: 'DELETE',
@@ -10,17 +15,20 @@ const Modal = ({setDeleteModal, electionID, candidateID, roles}) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          roles
+          adminRoles
         })
       });
       const data = await response.json();
       if(data.status === 'OK') {
         alert(data.message)
-        window.location.href = `/admin/elections/${electionID}/candidates`
+        navigate(`/admin/elections/${electionID}/candidates`, {
+          state: { data: { ...data.election } },
+        });
       } else {
         console.log(data.data)
         alert(data.message)
       }
+      window.location.reload();
   }
   return (
     <>

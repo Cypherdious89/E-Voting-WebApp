@@ -11,31 +11,32 @@ const Image = new mongoose.Schema(
 
 const Candidate = new mongoose.Schema(
     {
-        candidateName: {type: String, required: true, maxlength: 40},
-        candidateAge: {type: Number, required: true},
-        candidatePhoto: {type: Image, required: true},
-        candidateUID: {type: String, required: true},
-        candidateDOB: {type: String, required: true}
+        Name: {type: String, required: true, maxlength: 40},
+        Age: {type: Number, required: true},
+        Photo: {type: Image, required: true},
+        UID: {type: String, required: true},
+        DOB: {type: String, required: true},
+        votes: {type: Array}
     },
     {collection: 'candidate-data'}
 )
 
 const Election = new mongoose.Schema(
     {
+        open: {type: Boolean, required: true},
         title: {type: String, required: true},
-        area: {type: String, required: true},
-        maxCandidate: {type: Number, required: true},
+        description: {type: String, required: true},
+        area: {type: String},
+        department: {type: String},
+        constraints: {type: Array, required: true},
+        maxCandidates: {type: Number, required: true},
         maxVoter: {type: Number, required: true},
-        maxVoteCount: {type: Number, required: true},
-        ageRestriction: {type: Boolean, required: true},
-        candidates: {type: [Candidate]},
-        voters: {type: Array},
+        maxWinners: {type: Number, required: true},
+        ageRestriction: {type: Boolean},
         active: {type: Boolean, default: true},
-        phase: {
-            type: Number,
-            enum: [0, 1, 2, 3, 4],
-            default: 0
-        }
+        phase: {type: Number, enum: [0, 1, 2, 3, 4], default: 0},
+        voters: {type: Array},
+        candidates: {type: [Candidate]}
     }, 
     {collection: 'election-data'}
 )

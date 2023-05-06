@@ -1,6 +1,7 @@
 import {Avatar, Button,TextField, Box, Typography, Container} from "@mui/material";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useState } from 'react';
+import { useNavigate } from "react-router";
 
 
 export default function LogIn() {
@@ -8,7 +9,7 @@ export default function LogIn() {
   const [password, setPassword] = useState('');
   const [mobileNo, setMobileNo] = useState('');
   const [accessCode, setAccessCode] = useState('');
-
+  const navigate = useNavigate();
 
     async function Adminlogin(event) {
         event.preventDefault();
@@ -29,7 +30,7 @@ export default function LogIn() {
                 localStorage.setItem('adminToken', data.admin)
                 sessionStorage.setItem("adminDetails", JSON.stringify(data.details));
                 alert('Login successful !');
-                window.location.href = '/admin/dashboard'
+                navigate('/admin/dashboard')
         } else {
                 alert('Invalid credentials, please try again !')
         } 
