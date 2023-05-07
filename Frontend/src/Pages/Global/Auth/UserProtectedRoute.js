@@ -14,7 +14,7 @@ function UserProtectedRoute({Component}) {
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
-              theme: "colored",
+              theme: "black",
             });
             setTimeout(() => {
                 navigate("/");

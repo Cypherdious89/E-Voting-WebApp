@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 import NavLogo from './assets/vote.png'
 import styles from '../../Styles/dashboard.module.css';
 import { Avatar, Tooltip } from '@mui/material';
@@ -9,8 +10,17 @@ function AdminNavbar({adminRoles}) {
     const handleLogout = () => {
         window.localStorage.clear();
         window.sessionStorage.clear()
-        window.location.href = '/'
-        alert("Successfully Logged Out !")
+        toast.info("Successfully Logged Out !", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
     };
     return (
         <nav className={styles.navbar}>

@@ -1,8 +1,8 @@
+import React, { useState } from 'react';
+import { useNavigate } from "react-router";
+import {toast} from "react-toastify"
 import {Avatar, Button,TextField, Box, Typography, Container} from "@mui/material";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { useState } from 'react';
-import { useNavigate } from "react-router";
-
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
@@ -29,10 +29,25 @@ export default function LogIn() {
         if (data.admin) {
                 localStorage.setItem('adminToken', data.admin)
                 sessionStorage.setItem("adminDetails", JSON.stringify(data.details));
-                alert('Login successful !');
+                toast.success("Login successful !", {
+                  position: "top-center",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  theme: "dark",
+                });
                 navigate('/admin/dashboard')
-        } else {
-                alert('Invalid credentials, please try again !')
+        } 
+        else {
+            toast.warn('Invalid credentials, please try again !', {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                theme: "dark",
+            })
         } 
     }
 

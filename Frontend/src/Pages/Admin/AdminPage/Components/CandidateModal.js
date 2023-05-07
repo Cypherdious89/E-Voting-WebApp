@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router';
+import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
@@ -58,7 +59,14 @@ function CandidateModal({ setIsModalOpen, election, open}) {
         });
         const data = await response.json();
         if (data.status === 'OK') {
-            alert('Successfully added candidate details !');
+            toast.success('Successfully added candidate details !', {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                theme: "dark"
+            });
             setIsModalOpen(false);
             if(open)
                 navigate(`/admin/elections/open/${electionID}/addCandidates`, {
@@ -69,7 +77,14 @@ function CandidateModal({ setIsModalOpen, election, open}) {
                     state: {data: {...data.election}}
                 });
         } else {
-            alert('Some error occurred, please try again !')
+            toast.error("Some error occurred, please try again !", {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark",
+            });
         }
         window.location.reload();
     }

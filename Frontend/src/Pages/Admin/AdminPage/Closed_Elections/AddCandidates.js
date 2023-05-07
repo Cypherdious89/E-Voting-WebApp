@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"
 import { Button } from "@mui/material";
 import CandidateModal from "../Components/CandidateModal";
 import AddCandidateTable from "../Components/AddCandidateTable";
@@ -44,7 +45,14 @@ function AddCandidates() {
               if (adminRoles[0] === "readwrite" && adminRoles[1] === "Admin")
                 setIsModalOpen(true);
               else 
-                alert("Only admins can add or modify candidates");
+                toast.error("Only admins can add or modify candidates", {
+                  position: "top-center",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  theme: "dark"
+                });
             }}
           >
             Add Candidate

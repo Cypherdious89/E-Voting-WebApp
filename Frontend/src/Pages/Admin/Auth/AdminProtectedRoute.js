@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import { toast } from "react-toastify";
 import {useNavigate} from 'react-router-dom'
 
 function AdminProtectedRoute({Component}) {
@@ -6,8 +7,17 @@ function AdminProtectedRoute({Component}) {
     useEffect(() => {
         let loggedIn = localStorage.getItem('adminToken')
         if (!loggedIn) {
-            navigate('/')
-            alert("You are not authorized to access this page !")
+            toast.error("You are not authorized to access this page !", {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark",
+            });
+            setTimeout(() => {
+              navigate("/");
+            }, 10);
         }
     })
     return (

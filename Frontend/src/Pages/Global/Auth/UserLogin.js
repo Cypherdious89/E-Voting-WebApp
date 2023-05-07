@@ -43,7 +43,7 @@ export default function LogIn() {
             });
             navigate('/user/dashboard')
         } else {
-            toast.error(data.message, {
+            toast.warn(data.message, {
               position: "top-center",
               autoClose: 1000,
               hideProgressBar: false,

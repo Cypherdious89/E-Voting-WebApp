@@ -1,5 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"
 import styles from '../Styles/phase.module.css'
 import AdminNavbar from "./Components/AdminNavbar";
 
@@ -43,10 +44,26 @@ const ChangeElectionPhase = () => {
     });
     const data = await response.json();
     if (data.status === 'OK') {
-      alert('Successfully updated Election Phase !');
-      navigate('/admin/elections/view/'+type)
+      toast.success('Successfully updated Election Phase !', {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      setTimeout(() => {
+        navigate('/admin/elections/view/'+type)
+      }, 1500)
     } else {
-      alert('Some error occurred, please try again !')
+      toast.error("Some error occurred, please try again !", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
     }
   }
 

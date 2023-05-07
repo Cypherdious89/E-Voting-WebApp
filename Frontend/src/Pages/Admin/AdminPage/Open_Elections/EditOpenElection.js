@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify"; 
 import {Avatar, Button,TextField, Box, Typography, Container, FormGroup, FormControlLabel, Switch} from "@mui/material";
 import PollRoundedIcon from '@mui/icons-material/PollRounded';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 
 function EditElection() {
@@ -52,12 +52,38 @@ function EditElection() {
 
     const data = await response.json();
     if (data.status === 'OK') {
-      alert('Successfully modified election details !');
-      navigate(`/admin/elections/open/${election._id}/addCandidates`, {
-        state: { data: { ...data.election } },
+      toast.success("Successfully modified election details !", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
       });
+      setTimeout(() => {
+        toast.info("View candidates list to modified election, to update", {
+          position: "top-center",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setTimeout(() => {
+          navigate(`/admin/elections/open/${data.election._id}/addCandidates`, {
+              state: { data: { ...data.election } },
+            },200);
+        }, 500);
+      }, 500);
     } else {
-      alert('Some error occurred, please try again !')
+      toast.error("Some error occurred, please try again !", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
     }
   }
 

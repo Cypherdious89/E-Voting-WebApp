@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
@@ -20,15 +21,33 @@ const Modal = ({setDeleteModal, electionID, candidateID}) => {
       });
       const data = await response.json();
       if(data.status === 'OK') {
-        alert(data.message)
-        navigate(`/admin/elections/${electionID}/candidates`, {
-          state: { data: { ...data.election } },
-        });
+        toast.success(data.message, {
+          position: "top-center",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark"
+        })
+        setTimeout(() => {
+          navigate(`/admin/elections/${electionID}/candidates`, {
+            state: { data: { ...data.election } },
+          });
+        }, 500);
       } else {
         console.log(data.data)
-        alert(data.message)
+        toast.error(data.message, {
+          position: "top-center",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark"
+        })
       }
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
   }
   return (
     <>
