@@ -20,21 +20,20 @@ function CandidateList() {
     const checkCandidatesCount = candidateList.length < election.maxCandidates;
 
     useEffect(() => {
-        fetch(`http://localhost:5500/api/get_candidates/${election._id}`, {
-                method: 'GET',
-            }).then((res) =>
-                res.json()
-            )
-            .then((candidate) => {
-                setCandidateList(candidate.data)
-            });
+        fetch(`http://localhost:5500/api/candidate/${election._id}/get`, {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((candidate) => {
+            setCandidateList(candidate.data);
+          });
     }, [election._id])
 
     return (
         <>
             <AdminNavbar />
             <h1 style={{fontSize: '36px', textAlign: 'center'}}>Candidate List for {election.title} - {election.open ? election.area : election.department}</h1>
-            {candidateList?.length ? <CandidateTable candidateList={candidateList} electionID={election._id} phase={election.phase} open={election.open}/> : <h3>No candidates Found</h3>}
+            {candidateList?.length ? <CandidateTable candidateList={candidateList} election={election} /> : <h3>No candidates Found</h3>}
             <div>
                 {election.phase === 1 && checkCandidatesCount &&
                 <Button variant="contained" color="primary"sx={{ width: 200, mx: 1, my: 2 }}

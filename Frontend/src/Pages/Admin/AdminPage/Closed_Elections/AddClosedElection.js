@@ -39,7 +39,7 @@ function AddClosedElection() {
 
   async function AddElectiontoDB(event) {
     event.preventDefault();
-    const response = await fetch('http://localhost:5500/api/add_closed_election_data', {
+    const response = await fetch('http://localhost:5500/api/election/closed/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

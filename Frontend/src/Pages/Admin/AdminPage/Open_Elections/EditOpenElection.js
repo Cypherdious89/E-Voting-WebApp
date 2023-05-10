@@ -19,7 +19,7 @@ function EditElection() {
   const [maxVoters, setMaxVoters] = useState(election.maxVoter);
   const [maxWinners, setMaxWinners] = useState(election.maxWinners);
   const [ageRestriction, setAgeRestriction] =useState(election.ageRestriction);
-  const phase = useState(election.phase);
+  const phase = election.phase;
 
   const min_candidates = 1, max_candidates = 100;
   const min_voters = 1, max_voters = 99999999;
@@ -32,54 +32,29 @@ function EditElection() {
     };
 
   async function EditElection(event) {
-    if(election.phase === 0){
-      event.preventDefault();
-      const response = await fetch(`http://localhost:5500/api/${election._id}/edit_open_election`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          area,
-          code,
-          maxCandidates,
-          maxVoters,
-          maxWinners,
-          ageRestriction,
-          adminRoles,
-          phase
-        })
-      });
+    event.preventDefault();
+    const response = await fetch(`http://localhost:5500/api/election/open/${election._id}/edit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        area,
+        code,
+        maxCandidates,
+        maxVoters,
+        maxWinners,
+        ageRestriction,
+        adminRoles,
+        phase
+      })
+    });
 
-      const data = await response.json();
-      if (data.status === 'OK') {
-        toast.success("Successfully modified election details !", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-        setTimeout(() => {
-          navigate(`/admin/elections/view/open`, {
-              state: { data: { ...data.election } },
-            });
-          }, 500);
-      } else {
-        toast.error("Some error occurred, please try again !", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-      }
-    } else {
-      toast.error("Election details can be modified only in creation phase", {
+    const data = await response.json();
+    if (data.status === 'OK') {
+      toast.success("Successfully modified election details !", {
         position: "top-center",
         autoClose: 1000,
         hideProgressBar: false,
@@ -88,8 +63,19 @@ function EditElection() {
         theme: "dark",
       });
       setTimeout(() => {
-        navigate("/admin/dashboard");
-      }, 500);
+        navigate(`/admin/elections/view/open`, {
+            state: { data: { ...data.election } },
+          });
+        }, 500);
+    } else {
+      toast.error("Some error occurred, please try again !", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
     }
   }
 

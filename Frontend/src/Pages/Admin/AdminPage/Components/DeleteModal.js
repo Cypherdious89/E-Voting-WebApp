@@ -10,48 +10,34 @@ const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
   const adminRoles = JSON.parse(roles);
 
   async function deleteCandidate() {
-    if(phase === 1){
-      const response = await fetch(`http://localhost:5500/api/${electionID}/delete_candidate/${candidateID}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          adminRoles,
-          phase
-        })
-      });
-      const data = await response.json();
-      if(data.status === 'OK') {
-        toast.success(data.message, {
-          position: "top-center",
-          autoClose: 500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark"
-        })
-        setTimeout(() => {
-          navigate(`/admin/elections/${electionID}/candidates`, {
-            state: { data: { ...data.election } },
-          });
-        }, 500);
-      } else {
-        console.log(data.data)
-        toast.error(data.message, {
-          position: "top-center",
-          autoClose: 500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark"
-        })
-      }
+    const response = await fetch(`http://localhost:5500/api/candidate/${electionID}/delete/${candidateID}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        adminRoles,
+        phase
+      })
+    });
+    const data = await response.json();
+    if(data.status === 'OK') {
+      toast.success(data.message, {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark"
+      })
       setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+        navigate(`/admin/elections/${electionID}/candidates`, {
+          state: { data: { ...data.election } },
+        });
+      }, 500);
     } else {
-      toast.error("Candidate List can be modified only in registration phase !", {
+      console.log(data.data)
+      toast.error(data.message, {
         position: "top-center",
         autoClose: 500,
         hideProgressBar: false,
@@ -60,6 +46,9 @@ const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
         theme: "dark"
       })
     }
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }
   return (
     <>

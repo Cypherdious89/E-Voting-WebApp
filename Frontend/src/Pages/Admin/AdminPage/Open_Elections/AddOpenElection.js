@@ -30,7 +30,7 @@ function AddOpenElection() {
 
   async function AddElectiontoDB(event) {
     event.preventDefault();
-    const response = await fetch('http://localhost:5500/api/add_open_election_data', {
+    const response = await fetch('http://localhost:5500/api/election/open/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

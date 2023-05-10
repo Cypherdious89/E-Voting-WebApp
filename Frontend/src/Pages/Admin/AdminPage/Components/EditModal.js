@@ -4,11 +4,14 @@ import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-function EditModal({setEditModal, candidate, electionID, open, phase}) {
+function EditModal({setEditModal, candidate, election}) {
     const navigate = useNavigate();
     const candidateID = candidate._id;
     const roles = sessionStorage.getItem("adminRoles");
     const adminRoles = JSON.parse(roles);
+    const electionID = election._id;
+    const phase = election.phase;
+
     const [candidateName, setCandidateName] = useState(candidate.Name)
     const [candidateUID, setCandidateUID] = useState(candidate.UID)
     const [candidateImage, setCandidateImage] = useState(candidate.Photo)
@@ -38,60 +41,181 @@ function EditModal({setEditModal, candidate, electionID, open, phase}) {
         setCandidateAge(candidateAge);
     }
 
+    const checkUniqueID = (uid, open, constraints) => {
+      if (!open) {
+        if (uid.length !== 10) {
+          toast.error("Unique ID must have 10 characters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+        // Check if the first three characters match the first constraint
+        const firstThreeChars = uid.substring(0, 3);
+        if (firstThreeChars !== constraints[0]) {
+          toast.error(`Branch must be ${constraints[0]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Check if the next four characters match the second constraint
+        const yearString = uid.substring(3, 7);
+        const year = parseInt(yearString);
+        if (isNaN(year) || year !== constraints[1]) {
+          toast.error(`Year must be ${constraints[1]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Check if the next three characters are less than the third constraint
+        const limitString = uid.substring(7, 10);
+        const limit = parseInt(limitString);
+        if (isNaN(limit) || limit >= constraints[2]) {
+          toast.error(`Roll No. must be less than ${constraints[2]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Unique ID is valid
+        toast.info("Unique ID is valid", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setCandidateUID(uid);
+        return true;
+      } else {
+        if (/[^a-zA-Z]/.test(uid)) {
+          toast.error("Party code must only contain letters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        if (uid.length === 0) {
+          toast.error("Enter Party Code", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        if (uid.length > 10) {
+          toast.error("Party code must of maximum 10 characters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Unique ID is valid
+        toast.info("Party Code is valid", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setCandidateUID(uid);
+        return true;
+      }
+    };
+
     async function editCandidate(event){
         event.preventDefault()
-        if(phase === 1){
-          const response = await fetch(
-            `http://localhost:5500/api/${electionID}/edit_candidate_details`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-              body: JSON.stringify({
-                candidateID,
-                candidateName,
-                candidateUID,
-                candidateImage,
-                candidateImageName,
-                candidateAge,
-                candidateDOB,
-                electionID,
-                adminRoles,
-                phase,
-              }),
-            }
-          );
-          const data = await response.json();
-          if (data.status === "OK") {
-            toast.success("Successfully added candidate details !", {
-              position: "top-center",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "dark",
-            });
-            setEditModal(false);
-            navigate(`/admin/elections/${electionID}/candidates`, {
-              state: { data: { ...data.election } },
-            });
-          } else {
-            toast.error("Some error occurred, please try again !", {
-              position: "top-center",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "dark",
-            });
+        const response = await fetch(`http://localhost:5500/api/candidate/${electionID}/edit`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              candidateID,
+              candidateName,
+              candidateUID,
+              candidateImage,
+              candidateImageName,
+              candidateAge,
+              candidateDOB,
+              electionID,
+              adminRoles,
+              phase,
+            }),
           }
-          window.location.reload();
+        );
+        const data = await response.json();
+        if (data.status === "OK") {
+          toast.success("Successfully added candidate details !", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setEditModal(false);
+          navigate(`/admin/elections/${electionID}/candidates`, {
+            state: { data: { ...data.election } },
+          });
         } else {
-          toast.error("Candidate details can be modified only in registration phase !")
+          toast.error("Some error occurred, please try again !", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
         }
+        window.location.reload();
     }
+    
     return (
       <>
         <div className={styles.darkBG} onClick={() => setEditModal(false)} />
@@ -122,7 +246,7 @@ function EditModal({setEditModal, candidate, electionID, open, phase}) {
                   />
                 </div>
                 <div className={styles.formData}>
-                  {open ? (
+                  {election.open ? (
                     <label className={styles.modalLabel}>Party</label>
                   ) : (
                     <label className={styles.modalLabel}>Unique ID</label>
@@ -133,6 +257,10 @@ function EditModal({setEditModal, candidate, electionID, open, phase}) {
                     required
                     value={candidateUID}
                     onChange={(e) => setCandidateUID(e.target.value)}
+                    onBlur={(e) => {
+                      const uid = e.target.value;
+                      checkUniqueID(uid, election.open, election.constraints);
+                    }}
                     name="hidden"
                     id="uid"
                     className={styles.textField}

@@ -39,66 +39,181 @@ function CandidateModal({ setIsModalOpen, election}) {
         setCandidateAge(candidateAge);
     }
 
-    async function populateCandidate(event) {
-      event.preventDefault();
-      if(phase === 1){
-        const response = await fetch('http://localhost:5500/api/add_candidate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: JSON.stringify({
-                candidateName,
-                candidateUID,
-                candidateImage,
-                candidateImageName,
-                candidateDOB,
-                candidateAge,
-                electionID,
-                adminRoles,
-                phase
-            })
-        });
-        const data = await response.json();
-        if (data.status === 'OK') {
-            toast.success('Successfully added candidate details !', {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme: "dark"
-            });
-            setIsModalOpen(false);
-            navigate(`/admin/elections/${electionID}/candidates`, {
-                state: { data: { ...data.election } },
-            });
-            window.location.reload()
-        } else {
-            toast.error("Some error occurred, please try again !", {
+    const checkUniqueID = (uid, open, constraints) => {
+      if(!open){
+        if (uid.length !== 10) {
+          toast.error("Unique ID must have 10 characters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark"
+          });
+          setCandidateUID("")
+          return false;
+        }
+        // Check if the first three characters match the first constraint
+        const firstThreeChars = uid.substring(0, 3);
+        if (firstThreeChars !== constraints[0]) {
+          toast.error(`Branch must be ${constraints[0]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark"
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Check if the next four characters match the second constraint
+        const yearString = uid.substring(3, 7);
+        const year = parseInt(yearString);
+        if (isNaN(year) || year !== constraints[1]) {
+          toast.error(`Year must be ${constraints[1]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark"
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Check if the next three characters are less than the third constraint
+        const limitString = uid.substring(7, 10);
+        const limit = parseInt(limitString);
+        if (isNaN(limit) || limit >= constraints[2]) {
+          toast.error(`Roll No. must be less than ${constraints[2]}`, {
               position: "top-center",
               autoClose: 1000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
-              theme: "dark",
-            });
+              theme: "dark"
+            }
+          );
+          setCandidateUID("");
+          return false;
         }
-        window.location.reload();
+
+        // Unique ID is valid
+        toast.info("Unique ID is valid", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark"
+        });
+        setCandidateUID(uid);
+        return true;
       } else {
-        toast.error("Candidates can be added in registration phase only !", {
+        if (/[^a-zA-Z]/.test(uid)) {
+          toast.error("Party code must only contain letters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        if (uid.length === 0) {
+          toast.error("Enter Party Code", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        if (uid.length > 10) {
+          toast.error("Party code must of maximum 10 characters", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setCandidateUID("");
+          return false;
+        }
+
+        // Unique ID is valid
+        toast.info("Party Code is valid", {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           theme: "dark",
-        })
+        });
+        setCandidateUID(uid);
+        return true;
       }
-    }
+    };
 
-    return (
+    async function populateCandidate(event) {
+      event.preventDefault();
+      const response = await fetch(`http://localhost:5500/api/candidate/${electionID}/add`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json'
+          },
+          body: JSON.stringify({
+              candidateName,
+              candidateUID,
+              candidateImage,
+              candidateImageName,
+              candidateDOB,
+              candidateAge,
+              adminRoles,
+              phase
+          })
+      });
+      const data = await response.json();
+      if (data.status === 'OK') {
+          toast.success('Successfully added candidate details !', {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark"
+          });
+          setIsModalOpen(false);
+          navigate(`/admin/elections/${electionID}/candidates`, {
+              state: { data: { ...data.election } },
+          });
+          window.location.reload()
+      } else {
+          toast.error("Some error occurred, please try again !", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+      }
+      window.location.reload();
+    }
+    
+  return (
       <>
         <div className={styles.darkBG} onClick={() => setIsModalOpen(false)} />
         <div className={styles.centered}>
@@ -129,7 +244,7 @@ function CandidateModal({ setIsModalOpen, election}) {
                 </div>
                 <div className={styles.formData}>
                   {election.open ? (
-                    <label className={styles.modalLabel}>Party</label>
+                    <label className={styles.modalLabel}>Party ID</label>
                   ) : (
                     <label className={styles.modalLabel}>Unique ID</label>
                   )}
@@ -140,9 +255,14 @@ function CandidateModal({ setIsModalOpen, election}) {
                     required
                     value={candidateUID}
                     onChange={(e) => setCandidateUID(e.target.value)}
+                    onBlur={(e) => {
+                      const uid = e.target.value;
+                      checkUniqueID(uid, election.open, election.constraints);
+                    }}
                     name="hidden"
                     id="uid"
                     className={styles.textField}
+                    maxLength={10}
                   />
                 </div>
                 <div className={styles.formData}>

@@ -5,7 +5,7 @@ function Results() {
   const [electionList, setElectionList] = useState([]);
 
   useEffect (() => {
-    fetch("http://localhost:5500/api/get_completed_elections", {
+    fetch("http://localhost:5500/api/election/completed", {
       method: 'GET'
     }).then((res) => res.json())
       .then((elections) => {

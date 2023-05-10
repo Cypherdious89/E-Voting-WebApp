@@ -16,7 +16,7 @@ function ViewElections() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5500/api/get_closed_election_data", {
+    fetch("http://localhost:5500/api/election/closed/get", {
       method: "GET",
     })
       .then((res) => res.json())

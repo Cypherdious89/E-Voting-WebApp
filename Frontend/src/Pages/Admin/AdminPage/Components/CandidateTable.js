@@ -30,24 +30,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-function CandidateTable({ candidateList, electionID, phase, open }) {
+function CandidateTable({ candidateList, election }) {
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [candidate, setCandidate] = useState([]);
   const roles = sessionStorage.getItem("adminRoles");
   const adminRoles = JSON.parse(roles);
+  const electionID = election._id;
+  const phase = election.phase;
 
   async function findCandidate(electionID, candidateID, buttonClicked) {
     const response = await fetch(
-      `http://localhost:5500/api/${electionID}/find_candidate_details`,
+      `http://localhost:5500/api/candidate/${electionID}/find/${candidateID}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          candidateID,
-        }),
       }
     );
     const data = await response.json();
@@ -161,9 +160,7 @@ function CandidateTable({ candidateList, electionID, phase, open }) {
         <EditModal
           setEditModal={setEditModal}
           candidate={candidate}
-          electionID={electionID}
-          open={open}
-          phase={phase}
+          election={election}
         />
       )}
       {deleteModal && (

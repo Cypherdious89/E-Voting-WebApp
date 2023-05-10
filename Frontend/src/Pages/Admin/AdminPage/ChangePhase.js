@@ -28,7 +28,7 @@ const ChangeElectionPhase = () => {
     if (phase === 3) active = false;
     else phase += 1
 
-    const response = await fetch('http://localhost:5500/api/change_election_phase', {
+    const response = await fetch('http://localhost:5500/api/election/phase', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

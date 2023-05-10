@@ -119,7 +119,7 @@ export default function LogIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Request Log In
+              Log In
             </Button>
             <Grid container>
               <Grid item xs>

@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import NavLogo from './assets/vote.png'
 import styles from '../../Styles/dashboard.module.css';
-import { Avatar, Tooltip } from '@mui/material';
+import { Avatar, IconButton, Tooltip } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 
 function AdminNavbar({adminRoles}) {
     const handleLogout = () => {
@@ -29,6 +30,7 @@ function AdminNavbar({adminRoles}) {
                 <span>E-Voting Portal</span>
             </div>
             <div className={styles.navbarRight}>
+                <Link to="/admin/dashboard"><IconButton><HomeRoundedIcon sx={{color: 'white'}}/></IconButton></Link>
                 <Link onClick={()=>handleLogout()} className={styles.logoutBtn}>Logout</Link>
                 <Link to="/admin/profile" state={{adminRoles: adminRoles}}>
                     <div className={styles.avatar}>
