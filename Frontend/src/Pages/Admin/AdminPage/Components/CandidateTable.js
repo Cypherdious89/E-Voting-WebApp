@@ -30,7 +30,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-function CandidateTable({ candidateList, electionID }) {
+function CandidateTable({ candidateList, electionID, phase, open }) {
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [candidate, setCandidate] = useState([]);
@@ -68,7 +68,11 @@ function CandidateTable({ candidateList, electionID }) {
               <StyledTableCell align="center">Candidate Name</StyledTableCell>
               <StyledTableCell align="center">Candidate ID</StyledTableCell>
               <StyledTableCell align="center">Candidate Age</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+              {phase === 1 ? (
+                <StyledTableCell align="center">Actions</StyledTableCell>
+              ) : (
+                ""
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -91,56 +95,63 @@ function CandidateTable({ candidateList, electionID }) {
                 <StyledTableCell align="center">
                   {candidate.Age}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  <IconButton
-                    aria-label="edit"
-                    color="secondary"
-                    onClick={() => {
-                      if (
-                        adminRoles[0] === "readwrite" &&
-                        adminRoles[1] === "Admin"
-                      )
-                        findCandidate(electionID, candidate._id, "EDIT");
-                      else
-                        toast.error(
-                          "Only admins can add or modify candidates",
-                          {
-                            position: "top-center",
-                            autoClose: 1000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            theme: "dark"
-                          }
-                        );
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label="delete"
-                    color="error"
-                    onClick={() => {
-                      if (
-                        adminRoles[0] === "readwrite" &&
-                        adminRoles[1] === "Admin"
-                      )
-                        findCandidate(electionID, candidate._id, "DELETE");
-                      else {
-                        toast.error("Only admins can add or modify candidates", {
-                            position: "top-center",
-                            autoClose: 1000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            theme: "dark"
-                        });
-                      }
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </StyledTableCell>
+                {phase === 1 ? (
+                  <StyledTableCell align="center">
+                    <IconButton
+                      aria-label="edit"
+                      color="secondary"
+                      onClick={() => {
+                        if (
+                          adminRoles[0] === "readwrite" &&
+                          adminRoles[1] === "Admin"
+                        )
+                          findCandidate(electionID, candidate._id, "EDIT");
+                        else
+                          toast.error(
+                            "Only admins can add or modify candidates",
+                            {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              theme: "dark",
+                            }
+                          );
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => {
+                        if (
+                          adminRoles[0] === "readwrite" &&
+                          adminRoles[1] === "Admin"
+                        )
+                          findCandidate(electionID, candidate._id, "DELETE");
+                        else {
+                          toast.error(
+                            "Only admins can add or modify candidates",
+                            {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              theme: "dark",
+                            }
+                          );
+                        }
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </StyledTableCell>
+                ) : (
+                  ""
+                )}
               </StyledTableRow>
             ))}
           </TableBody>
@@ -151,6 +162,8 @@ function CandidateTable({ candidateList, electionID }) {
           setEditModal={setEditModal}
           candidate={candidate}
           electionID={electionID}
+          open={open}
+          phase={phase}
         />
       )}
       {deleteModal && (
@@ -158,6 +171,7 @@ function CandidateTable({ candidateList, electionID }) {
           setDeleteModal={setDeleteModal}
           electionID={electionID}
           candidateID={candidate._id}
+          phase={phase}
         />
       )}
     </>

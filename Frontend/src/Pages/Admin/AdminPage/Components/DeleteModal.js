@@ -4,19 +4,21 @@ import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({setDeleteModal, electionID, candidateID}) => {
+const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
   const navigate = useNavigate();
   const roles = sessionStorage.getItem("adminRoles");
   const adminRoles = JSON.parse(roles);
 
   async function deleteCandidate() {
+    if(phase === 1){
       const response = await fetch(`http://localhost:5500/api/${electionID}/delete_candidate/${candidateID}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          adminRoles
+          adminRoles,
+          phase
         })
       });
       const data = await response.json();
@@ -48,6 +50,16 @@ const Modal = ({setDeleteModal, electionID, candidateID}) => {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
+    } else {
+      toast.error("Candidate List can be modified only in registration phase !", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark"
+      })
+    }
   }
   return (
     <>

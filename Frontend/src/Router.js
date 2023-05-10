@@ -14,6 +14,7 @@ import ErrorPage from './Pages/Home/Error'
 import Signup from './Pages/Global/Auth/UserSignup'
 import Login from './Pages/Global/Auth/UserLogin'
 import ForgotPassword from './Pages/Global/Auth/Forgot'
+import UserOTPVerify from './Pages/Global/Auth/VerifyOTP'
 import UserDashboard from "./Pages/Global/Userpage/UserDashboard"
 import OngoingElections from "./Pages/Global/Userpage/ViewElections"
 import ViewResults from "./Pages/Global/Userpage/Results"
@@ -33,13 +34,11 @@ import CandidateList from './Pages/Admin/AdminPage/CandidateList'
 import AddOpenElection from "./Pages/Admin/AdminPage/Open_Elections/AddOpenElection"
 import ViewOpenElections from "./Pages/Admin/AdminPage/Open_Elections/ViewOpenElections"
 import EditOpenElection from './Pages/Admin/AdminPage/Open_Elections/EditOpenElection'
-import AddOpenCandidates from "./Pages/Admin/AdminPage/Open_Elections/AddCandidates"
 
 //Closed Election Routes
 import AddClosedElection from './Pages/Admin/AdminPage/Closed_Elections/AddClosedElection'
 import ViewClosedElections from "./Pages/Admin/AdminPage/Closed_Elections/ViewClosedElections"
 import EditClosedElection from './Pages/Admin/AdminPage/Closed_Elections/EditClosedElection'
-import AddClosedCandidates from "./Pages/Admin/AdminPage/Closed_Elections/AddCandidates";
 
 
 function Router() {
@@ -52,6 +51,8 @@ function Router() {
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="verify-otp" element={<UserOTPVerify />} />
+            
             <Route
               path="dashboard"
               element={<UserProtectedRoute Component={UserDashboard} />}
@@ -86,16 +87,8 @@ function Router() {
               element={<AdminAccessRoute Component={AddOpenElection} />}
             />
             <Route
-              path="elections/open/:_id/addCandidates"
-              element={<AdminAccessRoute Component={AddOpenCandidates} />}
-            />
-            <Route
               path="elections/add/closed"
               element={<AdminAccessRoute Component={AddClosedElection} />}
-            />
-            <Route
-              path="elections/closed/:_id/addCandidates"
-              element={<AdminAccessRoute Component={AddClosedCandidates} />}
             />
             <Route
               path="elections/view"

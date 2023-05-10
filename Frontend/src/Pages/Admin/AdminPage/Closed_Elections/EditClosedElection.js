@@ -18,6 +18,7 @@ function EditClosedElection() {
   const [maxVoters, setMaxVoters] = useState(election.maxVoter);
   const [maxCandidates, setMaxCandidates] = useState(election.maxCandidates);
   const [maxWinners, setMaxWinners] = useState(election.maxWinners);
+  const phase = useState(election.phase);
 
   const min_candidates = 1, max_candidates = 20;
   const min_voters = 1, max_voters = 300;
@@ -25,73 +26,77 @@ function EditClosedElection() {
   const min_year = 2015, max_year = 2023;
 
   const handleKeyDown = (e) => {
-    if (/[0-9]/.test(e.key)) {
+    if (/[0-9]/.test(e.key) && e.key === "Backspace") {
       e.preventDefault();
     }
   };
 
   const handleNumKeyDown = (e) => {
-    if (/![0-9]/.test(e.key)) {
+    if (/![0-9]/.test(e.key) && e.key === "Backspace") {
       e.preventDefault();
     }
   };
 
 
   async function EditElection(event) {
-    event.preventDefault();
-    const response = await fetch(`http://localhost:5500/api/${election._id}/edit_closed_election`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        department,
-        branch,
-        year,
-        maxVoters,
-        maxCandidates,
-        maxWinners,
-        adminRoles
-      })
-    });
-
-    const data = await response.json();
-    if (data.status === 'OK') {
-      toast.success("Successfully added election details !", {
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: "black",
+    if(election.phase === 0){
+      event.preventDefault();
+      const response = await fetch(`http://localhost:5500/api/${election._id}/edit_closed_election`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          department,
+          branch,
+          year,
+          maxVoters,
+          maxCandidates,
+          maxWinners,
+          adminRoles,
+          phase
+        })
       });
-      
-      setTimeout(() => {
-        toast.info("Add candidates to created election", {
+
+      const data = await response.json();
+      if (data.status === 'OK') {
+        toast.success("Successfully modified election details !", {
           position: "top-center",
-          autoClose: 500,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           theme: "dark",
         });
         setTimeout(() => {
-          navigate(`/admin/elections/closed/${data.election._id}/addCandidates`,{
-              state: { data: { ...data.election } },
-            }, 200);
+          navigate(`/admin/elections/view/closed`,{
+            state: { data: { ...data.election } },
+          });
         }, 500);
-      }, 500);
+      } else {
+        toast.error("Some error occurred, please try again !", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+      });
+      }
     } else {
-      toast.error("Some error occurred, please try again !", {
+      toast.error("Election details can be modified only in creation phase", {
         position: "top-center",
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         theme: "dark",
-     });
+      });
+      setTimeout(() => {
+        navigate('/admin/dashboard');
+      }, 500);
     }
   }
 

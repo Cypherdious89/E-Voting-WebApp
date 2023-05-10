@@ -8,9 +8,11 @@ function UserProtectedRoute({Component}) {
     useEffect(() => {
         let loggedIn = localStorage.getItem('userToken')
         if (!loggedIn) {
-            toast.error("Please login to continue!", {
-              position: "top-center",
-              autoClose: 1000,
+            setTimeout(() => {
+
+                toast.error("Please login to continue!", {
+                    position: "top-center",
+                    autoClose: 1000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -18,7 +20,8 @@ function UserProtectedRoute({Component}) {
             });
             setTimeout(() => {
                 navigate("/");
-            }, 10)
+            }, 100)
+        }, 1000)
         }
     })
     return (

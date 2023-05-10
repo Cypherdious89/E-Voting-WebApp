@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import styles from "../../Styles/view_elections.module.css";
 import AdminNavbar from "../Components/AdminNavbar";
 
@@ -12,9 +11,8 @@ function ViewElections() {
     0: "Creation phase",
     1: "Registration phase",
     2: "Voting phase",
-    3: "Finalization phase",
-    4: "Result Phase",
-    5: "Election end phase",
+    3: "Result Phase",
+    4: "Election end phase",
   };
 
   useEffect(() => {
@@ -59,12 +57,26 @@ function ViewElections() {
           <h4 className={styles.description}>{election.description}</h4>
           <PropertiesGrid election={election} />
           <div className={styles.btn_container}>
-            <Link
-              to={`/admin/elections/${election._id}/candidates`}
+            {election.phase > 0 ? 
+              <Link
+                to={`/admin/elections/${election._id}/candidates`}
+                state={{data: {...election}}}
+              >
+                <button className={styles.cardBtn}>Candidate List</button>
+              </Link>
+              :
+              ""
+            }
+            {election.phase > 0 ? 
+              <Link
+              to={`/admin/elections/closed/${election._id}/voters`}
               state={{data: {...election}}}
             >
-              <button className={styles.cardBtn}>Candidate List</button>
+              <button className = {styles.cardBtn}>
+                Registered Voters
+              </button>
             </Link>
+            :
             <Link
               to={`/admin/elections/edit/closed/${election._id}`}
               state={{data: {...election}}}
@@ -73,12 +85,13 @@ function ViewElections() {
                 Modify Election Details
               </button>
             </Link>
+            }
             <Link
               to={`/admin/elections/${election._id}/phase`}
               state={{data: {...election}}}
             >
               <button className={styles.cardBtn}>
-                Change Election Phases
+                Change Election Phase
               </button>
             </Link>
           </div>
@@ -101,7 +114,11 @@ function ViewElections() {
       <AdminNavbar />
       <div className={styles.mainbody}>
         <h1 className={styles.title}>Active Elections</h1>
-        <ElectionList electionList={electionList} />
+        {electionList.length > 0 ? (
+          <ElectionList electionList={electionList} />
+        ) : (
+          <h3 className={styles.subheading}>No election found !</h3>
+        )}
       </div>
     </>
   );

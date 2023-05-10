@@ -8,8 +8,6 @@ import PersonIcon from '@mui/icons-material/Person';
 
 function AdminNavbar({adminRoles}) {
     const handleLogout = () => {
-        window.localStorage.clear();
-        window.sessionStorage.clear()
         toast.info("Successfully Logged Out !", {
           position: "top-center",
           autoClose: 1000,
@@ -19,7 +17,9 @@ function AdminNavbar({adminRoles}) {
           theme: "dark",
         });
         setTimeout(() => {
-          window.location.href = "/";
+            window.location.href = "/";
+            window.localStorage.clear();
+            window.sessionStorage.clear();
         }, 1000);
     };
     return (

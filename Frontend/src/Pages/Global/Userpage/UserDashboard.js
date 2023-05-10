@@ -14,7 +14,7 @@ function UserDashboard() {
             }
         })
  
-        const data = req.json();
+        const data = await req.json();
         if(data.status === 'OK'){
             console.log(data)
         }
@@ -22,7 +22,9 @@ function UserDashboard() {
     
     useEffect (() => {
         const userToken = localStorage.getItem('userToken');
-        if (userToken) {
+        const otpVerified = localStorage.getItem('otpVerified');
+        
+        if (userToken && otpVerified) {
             const user = decodeToken(userToken)
             if(!user){
                 localStorage.removeItem(userToken);
@@ -31,7 +33,7 @@ function UserDashboard() {
                 populateUser();
             }
         }
-    }, [navigate])
+    }, [navigate]);
 
     return (
         <div className={styles.container}>

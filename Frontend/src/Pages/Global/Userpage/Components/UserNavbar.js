@@ -21,6 +21,7 @@ function AdminNavbar() {
         });
         setTimeout(() => {
           window.location.href = "/";
+          window.sessionStorage.clear();
         }, 1000);
     };
     return (

@@ -16,9 +16,8 @@ const ChangeElectionPhase = () => {
     0: "Creation phase",
     1: "Registration phase",
     2: "Voting phase",
-    3: "Finalization phase",
-    4: "Result phase",
-    5: "Election end",
+    3: "Result phase",
+    4: "Close Election",
   };
   const status = election.active === true ? "Active" : "Closed";
   const type = election.open === true ? "open" : "closed";
@@ -26,7 +25,7 @@ const ChangeElectionPhase = () => {
   let phase = election.phase, active = election.active;
 
   async function handlePhaseChange() {
-    if (phase === 4) active = false;
+    if (phase === 3) active = false;
     else phase += 1
 
     const response = await fetch('http://localhost:5500/api/change_election_phase', {

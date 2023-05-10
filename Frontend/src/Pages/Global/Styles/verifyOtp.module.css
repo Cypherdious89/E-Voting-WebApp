@@ -1,0 +1,70 @@
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Raleway, sans-serif;
+  background-color: #efecec;
+  border-radius: 20px;
+}
+
+.heading {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.message {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Styles for the OTP verification form */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.input_area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: space-between; */
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.field_label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  /* padding: 5px 10px; */
+}
+
+.otp_input {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 200px;
+  text-align: center;
+  outline: none;
+}
+
+.submit_button {
+  font-size: 20px;
+  padding: 10px 30px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.submit_button:hover {
+  background-color: #0062cc;
+}

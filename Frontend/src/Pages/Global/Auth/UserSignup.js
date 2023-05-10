@@ -1,6 +1,5 @@
 import React from 'react';
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -20,11 +19,44 @@ function SignUp() {
 
     const navigate = useNavigate();
 
-    const handleKeyDown = (e) => {
-      if (!/[0-9]/.test(e.key)) {
-        e.preventDefault();
-      }
-    };
+  const handleKeyDown = (e) => {
+    if (!/[0-9]/.test(e.key) && e.key !== "Backspace") {
+      e.preventDefault();
+    }
+  };
+
+    // const sendOTP = async () => {
+    //   const request = await fetch("http://localhost:5500/api/otp/send", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       email: email,
+    //       mobile: mobileNumber,
+    //     }),
+    //   });
+    //   const data = await request.json();
+    //   if (data.status === "OK") {
+    //     toast.success(data.message, {
+    //       position: "top-center",
+    //       autoClose: 500,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       theme: "dark",
+    //     });
+    //   } else {
+    //     toast.error(data.message, {
+    //       position: "top-center",
+    //       autoClose: 500,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       theme: "dark",
+    //     });
+    //   }
+    // };
 
     async function SignupUser(event){
         event.preventDefault();

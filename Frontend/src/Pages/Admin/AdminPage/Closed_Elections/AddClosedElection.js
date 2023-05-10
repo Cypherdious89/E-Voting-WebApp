@@ -65,24 +65,13 @@ function AddClosedElection() {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
-        theme: "black",
+        theme: "dark",
       });
       setTimeout(() => {
-        toast.info("Add candidates to created election", {
-          position: "top-center",
-          autoClose: 500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
+        navigate(`/admin/elections/view/closed`, {
+          state: { data: { ...data.election } },
         });
-        setTimeout(() => {
-          navigate(`/admin/elections/closed/${data.election._id}/addCandidates`,{
-              state: { data: { ...data.election } },
-            }, 200);
-        }, 500);
       }, 500);
-
     } else {
       toast.error("Some error occurred, please try again !", {
         position: "top-center",
