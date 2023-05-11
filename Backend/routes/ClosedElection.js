@@ -2,6 +2,7 @@ const express = require("express");200
 const router = express.Router();
 const checkRoleAuth = require("../middleware/RoleAuthorization");
 const Election = require("../models/ElectionData");
+const ObjectID = require("mongodb").ObjectId;
 
 //* Closed Elections
 //? Add Election Route
@@ -51,7 +52,7 @@ router.post("/:_id/edit", checkRoleAuth, async (req, res) => {
         return res.status(200).json({ status: "OK", election: updatedElections });
       } catch (err) {
         console.log(err);
-        return res.status(403).json({ status: "error", data: err.message });
+        return res.status(204).json({ status: "error", data: err.message });
       }
     } else {
       return res.status(501).json({ status: "error" });

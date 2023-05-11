@@ -58,6 +58,64 @@ function SignUp() {
     //   }
     // };
 
+    const checkUniqueID = (uid) => {
+      if (uid.length !== 10) {
+        toast.error("Unique ID must have 10 characters", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setUid("");
+        return false;
+      }
+
+      const firstThreeChars = uid.slice(0, 3);
+      const lastSevenChars = uid.slice(3, 10);
+      const regexUppercase = /^[A-Z]+$/;
+      const regexNumbers = /^[0-9]+$/;
+      // Check if the first three characters are uppercase letters
+      if (!regexUppercase.test(firstThreeChars)) {
+        toast.error(`First Three Characters of ID must be uppercase letters`, {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setUid("");
+        return false;
+      }
+
+      if (!regexNumbers.test(lastSevenChars)) {
+        toast.error(`Last Seven Characters of ID must be numbers`, {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setUid("");
+        return false;
+      }
+
+      // Unique ID is valid
+      toast.info("Unique ID is valid", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      setUid(uid);
+      return true;
+    }
+
     async function SignupUser(event){
         event.preventDefault();
         const response = await fetch('http://localhost:5500/api/signup', {
@@ -100,126 +158,130 @@ function SignUp() {
 
     return (
       <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="sm">
-            <CssBaseline />
+        <Container component="main" maxWidth="sm">
+          <CssBaseline />
+          <Box
+            sx={{
+              boxShadow: 3,
+              borderRadius: 2,
+              px: 4,
+              py: 2,
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign Up
+            </Typography>
             <Box
-              sx={{
-                boxShadow: 3,
-                borderRadius: 2,
-                px: 4,
-                py: 2,
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
+              component="form"
+              noValidate
+              onSubmit={SignupUser}
+              sx={{ mt: 3 }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign Up
-              </Typography>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={SignupUser}
-                sx={{ mt: 3 }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      value={username}
-                      onChange={(e) => setUserName(e.target.value)}
-                      name="name"
-                      required
-                      fullWidth
-                      id="name"
-                      label="Name"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      name="email"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      name="password"
-                      required
-                      fullWidth
-                      id="password"
-                      label="Password"
-                      type="password"
-                    />
-                  </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                    name="name"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    required
+                    fullWidth
+                    id="password"
+                    label="Password"
+                    type="password"
+                  />
+                </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      value={mobileNumber}
-                      onChange={(e) => setMobileNumber(e.target.value)}
-                      name="mobile"
-                      required
-                      fullWidth
-                      id="mobile"
-                      label="Mobile No."
-                      onKeyDown={handleKeyDown}
-                      inputProps={{ maxLength: 10 }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      value={uid}
-                      onChange={(e) => setUid(e.target.value)}
-                      name="uid"
-                      required
-                      fullWidth
-                      id="uid"
-                      label="Unique ID"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      value={aadhar}
-                      onChange={(e) => setAadhar(e.target.value)}
-                      name="aadhar"
-                      required
-                      fullWidth
-                      id="aadhar"
-                      label="Aadhar No."
-                      onKeyDown={handleKeyDown}
-                      inputProps={{ maxLength: 12 }}
-                      type="password"
-                    />
-                  </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    value={mobileNumber}
+                    onChange={(e) => setMobileNumber(e.target.value)}
+                    name="mobile"
+                    required
+                    fullWidth
+                    id="mobile"
+                    label="Mobile No."
+                    onKeyDown={handleKeyDown}
+                    inputProps={{ maxLength: 10 }}
+                  />
                 </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign Up !
-                </Button>
-                <Grid container justifyContent="flex-end">
-                  <Grid item>
-                    <Link to="/user/login" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
-                  </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    value={uid}
+                    onChange={(e) => setUid(e.target.value)}
+                    onBlur={(e) => {
+                      const uid = e.target.value;
+                      checkUniqueID(uid);
+                    }}
+                    name="uid"
+                    required
+                    fullWidth
+                    id="uid"
+                    label="Unique ID"
+                  />
                 </Grid>
-              </Box>
+                <Grid item xs={12}>
+                  <TextField
+                    value={aadhar}
+                    onChange={(e) => setAadhar(e.target.value)}
+                    name="aadhar"
+                    required
+                    fullWidth
+                    id="aadhar"
+                    label="Aadhar No."
+                    onKeyDown={handleKeyDown}
+                    inputProps={{ maxLength: 12 }}
+                    type="password"
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign Up !
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to="/user/login" variant="body2">
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
+              </Grid>
             </Box>
-          </Container>
+          </Box>
+        </Container>
       </ThemeProvider>
     );
 }

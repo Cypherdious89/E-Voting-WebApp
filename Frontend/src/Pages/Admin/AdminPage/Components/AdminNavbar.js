@@ -21,7 +21,7 @@ function AdminNavbar({adminRoles}) {
             window.location.href = "/";
             window.localStorage.clear();
             window.sessionStorage.clear();
-        }, 1000);
+        }, 500);
     };
     return (
         <nav className={styles.navbar}>

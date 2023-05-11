@@ -133,7 +133,7 @@ function EditClosedElection() {
             />
             <TextField
                 value={branch}
-                onChange={(e) => setBranch(e.target.value)}
+                onChange={(e) => setBranch(e.target.value.toUpperCase())}
                 name = "branch" required
                 id="branch"
                 label="Enter Branch Code"
@@ -154,8 +154,8 @@ function EditClosedElection() {
                     setYear(val);
                   }
                 }
-                name = "branch" required
-                id="branch"
+                name = "year" required
+                id="year"
                 label="Enter Year"
                 margin="normal"
                 autoComplete="false"

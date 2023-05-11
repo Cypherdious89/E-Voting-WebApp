@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const checkRoleAuth = require("../middleware/RoleAuthorization");
 const Election = require("../models/ElectionData");
+const ObjectID = require("mongodb").ObjectId;
 
 //* Open Elections
 //? Add Election Route
@@ -31,7 +32,6 @@ router.post("/add", checkRoleAuth, async (req, res) => {
 router.post("/:_id/edit", checkRoleAuth, async (req, res) => {
     const electionID = req.params._id;
     const phase = req.body.phase;
-    console.log(req.body);
     if (phase === 0) {
       try {
         const filter = { _id: new ObjectID(`${electionID}`) };

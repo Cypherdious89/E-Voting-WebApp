@@ -41,7 +41,7 @@ function UserDashboard() {
             <div className={styles.content}>
                 <h1 className={styles.title}>Welcome to User Dashboard</h1>
                 <div className={styles.cardContainer}>
-                    <Link to="/user/elections">
+                    <Link to="/user/elections/view">
                         <div className={styles.card}>
                             <h2>Elections</h2>
                             <p>View ongoing elections</p>

@@ -126,7 +126,7 @@ function EditElection() {
             />
             <TextField
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => setCode(e.target.value.toUpperCase())}
                 name = "code" required fullWidth
                 id="code"
                 label="ID Matching Code"

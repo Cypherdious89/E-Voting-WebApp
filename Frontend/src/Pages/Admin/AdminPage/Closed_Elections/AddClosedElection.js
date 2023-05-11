@@ -131,7 +131,7 @@ function AddClosedElection() {
             />
             <TextField
                 value={branch}
-                onChange={(e) => setBranch(e.target.value)}
+                onChange={(e) => setBranch(e.target.value.toUpperCase())}
                 name = "branch" required
                 id="branch"
                 label="Enter Branch Code"

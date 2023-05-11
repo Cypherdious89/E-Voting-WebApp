@@ -91,7 +91,8 @@ router.get("/:election_id/get", async (req, res) => {
     const candidateList = getElectionList.candidates;
     if (candidateList.length != 0)
       return res.status(200).json({ status: "OK", data: candidateList });
-    else return res.status(403).json({ status: "error", data: [] });
+    else 
+      return res.status(204).json({ status: "error", data: [] });
   } catch (err) {
     console.log(err);
     return res.status(501).json({ status: "error", data: err.message });

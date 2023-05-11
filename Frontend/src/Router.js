@@ -16,7 +16,7 @@ import Login from './Pages/Global/Auth/UserLogin'
 import ForgotPassword from './Pages/Global/Auth/Forgot'
 import UserOTPVerify from './Pages/Global/Auth/VerifyOTP'
 import UserDashboard from "./Pages/Global/Userpage/UserDashboard"
-import OngoingElections from "./Pages/Global/Userpage/ViewElections"
+import OngoingElections from "./Pages/Global/Userpage/SelectViewElection"
 import ViewResults from "./Pages/Global/Userpage/Results"
 import UserProfile from "./Pages/Global/Userpage/Profile"
 
@@ -58,7 +58,7 @@ function Router() {
               element={<UserProtectedRoute Component={UserDashboard} />}
             />
             <Route
-              path="elections"
+              path="elections/view"
               element={<UserProtectedRoute Component={OngoingElections} />}
             />
             <Route
