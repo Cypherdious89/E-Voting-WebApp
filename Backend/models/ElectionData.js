@@ -1,28 +1,23 @@
 const mongoose = require('mongoose');
 
-const Image = new mongoose.Schema(
-    {
-        name: {type: String, required: true},
-        file: {type: String, required: true},
-        uploadTime: {type: String, required: true},
-    },
-    {collection: 'candidate-image-data'}
+const Image = new mongoose.Schema({
+    name: {type: String, required: true},
+    file: {type: String, required: true},
+    uploadTime: {type: String, required: true},
+  },
 );
 
-const Candidate = new mongoose.Schema(
-    {
-        Name: {type: String, required: true, maxlength: 40},
-        Age: {type: Number, required: true},
-        Photo: {type: Image, required: true},
-        UID: {type: String, required: true, maxlength: 10},
-        DOB: {type: String, required: true},
-        votes: {type: Array}
-    },
-    {collection: 'candidate-data'}
+const Candidate = new mongoose.Schema({
+    Name: {type: String, required: true, maxlength: 40},
+    Age: {type: Number, required: true},
+    Photo: {type: Image, required: true},
+    UID: {type: String, required: true, maxlength: 10},
+    DOB: {type: String, required: true},
+    votes: {type: Array}
+  },
 )
 
-const Election = new mongoose.Schema(
-  {
+const Election = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     area: { type: String },

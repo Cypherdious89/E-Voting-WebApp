@@ -10,18 +10,18 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 function AdminNavbar({adminRoles}) {
     const handleLogout = () => {
         toast.info("Successfully Logged Out !", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-        setTimeout(() => {
-            window.location.href = "/";
-            window.localStorage.clear();
-            window.sessionStorage.clear();
-        }, 500);
+            position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+    });
+    setTimeout(() => {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        window.location.href = "/";
+      }, 500);
     };
     return (
         <nav className={styles.navbar}>

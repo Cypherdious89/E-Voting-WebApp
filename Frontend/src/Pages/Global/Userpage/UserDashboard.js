@@ -22,9 +22,9 @@ function UserDashboard() {
     
     useEffect (() => {
         const userToken = localStorage.getItem('userToken');
-        const otpVerified = localStorage.getItem('otpVerified');
+        // const otpVerified = localStorage.getItem('otpVerified');
         
-        if (userToken && otpVerified) {
+        if (userToken) {
             const user = decodeToken(userToken)
             if(!user){
                 localStorage.removeItem(userToken);

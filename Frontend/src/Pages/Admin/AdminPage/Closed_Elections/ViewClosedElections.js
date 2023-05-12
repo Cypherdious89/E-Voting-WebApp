@@ -69,7 +69,7 @@ function ViewElections() {
             }
             {election.phase > 0 ? 
               <Link
-              to={`/admin/elections/closed/${election._id}/voters`}
+              to={`/admin/elections/${election._id}/voters`}
               state={{data: {...election}}}
             >
               <button className = {styles.cardBtn}>
@@ -113,7 +113,7 @@ function ViewElections() {
     <>
       <AdminNavbar />
       <div className={styles.mainbody}>
-        <h1 className={styles.title}>Active Elections</h1>
+        <h1 className={styles.title}>Active Closed Elections</h1>
         {electionList.length > 0 ? (
           <ElectionList electionList={electionList} />
         ) : (

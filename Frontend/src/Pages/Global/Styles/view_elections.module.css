@@ -1,0 +1,153 @@
+/* Style for the entire page */
+.mainbody {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.listContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  grid-gap: 20px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .listContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Styles for the active elections page */
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.subheading {
+  font-size: 24px;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  width: max-content;
+  height: max-content;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.btn_container {
+  margin: 20px 0 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardBtn {
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease-in-out;
+  text-transform: uppercase;
+}
+
+.cardBtn:hover {
+  background-color: #0062cc;
+}
+
+.cardBtn + .cardBtn {
+  margin-left: 10px;
+}
+
+.cardBtn:first-child {
+  margin-right: 10px;
+}
+
+.cardBtn:last-child {
+  margin-left: 10px;
+}
+
+.card:before,
+.card:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:before {
+  background-color: #f8f8f8;
+  transform: scale(1);
+}
+
+.card:after {
+  background-color: #007bff;
+  transform: scale(0);
+}
+
+.btn_container:hover:before {
+  transform: scale(0.9);
+}
+
+.btn_container:hover:after {
+  transform: scale(1);
+}
+
+.grid_container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+}
+
+.grid_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.grid_title {
+  font-weight: bold;
+}
+
+.grid_value {
+  margin-top: 5px;
+}

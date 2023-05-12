@@ -9,6 +9,7 @@ export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [uid, setUid] = useState("");
 
   // var otpMail, otpMobile;
 
@@ -16,6 +17,64 @@ export default function LogIn() {
     if (!/[0-9]/.test(e.key) && e.key !== "Backspace") {
       e.preventDefault();
     }
+  };
+
+  const checkUniqueID = (uid) => {
+    if (uid.length !== 10) {
+      toast.error("Unique ID must have 10 characters", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      setUid("");
+      return false;
+    }
+
+    const firstThreeChars = uid.slice(0, 3);
+    const lastSevenChars = uid.slice(3, 10);
+    const regexUppercase = /^[A-Z]+$/;
+    const regexNumbers = /^[0-9]+$/;
+    // Check if the first three characters are uppercase letters
+    if (!regexUppercase.test(firstThreeChars)) {
+      toast.error(`First Three Characters of ID must be uppercase letters`, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      setUid("");
+      return false;
+    }
+
+    if (!regexNumbers.test(lastSevenChars)) {
+      toast.error(`Last Seven Characters of ID must be numbers`, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      setUid("");
+      return false;
+    }
+
+    // Unique ID is valid
+    toast.info("Unique ID is valid", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "dark",
+    });
+    setUid(uid);
+    return true;
   };
 
   async function loginUser(event) {
@@ -29,6 +88,7 @@ export default function LogIn() {
         email,
         password,
         mobileNumber,
+        uid
       }),
     });
     const data = await response.json();
@@ -99,6 +159,19 @@ export default function LogIn() {
               type="password"
               id="password"
               margin="normal"
+            />
+            <TextField
+              value={uid}
+              onChange={(e) => setUid(e.target.value)}
+              onBlur={(e) => {
+                const uid = e.target.value;
+                checkUniqueID(uid);
+              }}
+              name="uid"
+              required
+              fullWidth
+              id="uid"
+              label="Unique ID"
             />
             <TextField
               value={mobileNumber}

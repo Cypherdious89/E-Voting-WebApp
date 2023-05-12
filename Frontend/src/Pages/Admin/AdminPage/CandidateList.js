@@ -10,32 +10,32 @@ import CandidateModal from "./Components/CandidateModal";
 function CandidateList() {
     const navigate = useNavigate();
     const location = useLocation();
-    const election = location.state?.data
-    const electionType = election.open ? 'open' : 'closed';
+    const election = location.state?.data;
+    const electionType = election?.open ? 'open' : 'closed';
     const [candidateList, setCandidateList] = useState([])
     const roles = sessionStorage.getItem("adminRoles");
     const adminRoles = JSON.parse(roles);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const checkCandidatesCount = candidateList.length < election.maxCandidates;
+    const checkCandidatesCount = candidateList.length < election?.maxCandidates;
 
     useEffect(() => {
-        fetch(`http://localhost:5500/api/candidate/${election._id}/get`, {
+        fetch(`http://localhost:5500/api/candidate/${election?._id}/get`, {
           method: "GET",
         })
           .then((res) => res.json())
           .then((candidate) => {
             setCandidateList(candidate.data);
           });
-    }, [election._id])
+    }, [election?._id])
 
     return (
         <>
             <AdminNavbar />
-            <h1 style={{fontSize: '36px', textAlign: 'center'}}>Candidate List for {election.title} - {election.open ? election.area : election.department}</h1>
+            <h1 style={{fontSize: '36px', textAlign: 'center'}}>Candidate List for {election?.title} - {election?.open ? election?.area : election?.department}</h1>
             {candidateList?.length ? <CandidateTable candidateList={candidateList} election={election} /> : <h3>No candidates Found</h3>}
             <div>
-                {election.phase === 1 && checkCandidatesCount &&
+                {election?.phase === 1 && checkCandidatesCount &&
                 <Button variant="contained" color="primary"sx={{ width: 200, mx: 1, my: 2 }}
                     onClick={() => {
                     if (adminRoles[0] === "readwrite" && adminRoles[1] === "Admin")

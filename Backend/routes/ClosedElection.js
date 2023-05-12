@@ -60,7 +60,7 @@ router.post("/:_id/edit", checkRoleAuth, async (req, res) => {
   }
 );
 
-//? Show all ongoing closed elections
+//? Show all ongoing elections to admin
 router.get("/get", async (req, res) => {
   try {
     const getElectionList = await Election.find({
@@ -71,6 +71,17 @@ router.get("/get", async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(403).json({ status: "error" });
+  }
+});
+
+//? Show all ongoing elections to user
+router.get("/get/user", async (req, res) => {
+  try {
+    const getElectionList = await Election.find({active: { $all: true }, open: { $all: false }, phase: { $gt: 0 }});
+    return res.status(200).json({ status: "OK", data: getElectionList });
+  } catch (err) {
+    console.log(err);
+    return res.status(501).json({ status: "error", data: err.message });
   }
 });
 

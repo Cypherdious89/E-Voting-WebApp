@@ -1,0 +1,38 @@
+.container {
+  max-width: 750px;
+  margin: 0 auto;
+  margin-top: 2rem;
+  text-align: justify;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textContainer {
+    background-color: #f7f7f7;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+  ;
+}
+
+.description, .area, .department, .candidates, .voters, .winners, .ageRestriction, .phase {
+  margin-bottom: 1rem;
+}
+
+.body {
+  margin-bottom: 2rem;
+}
+
+.button {
+  width: 150px;
+  margin: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}

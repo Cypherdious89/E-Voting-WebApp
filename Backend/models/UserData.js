@@ -8,6 +8,7 @@ const User = new mongoose.Schema(
         mobileNumber : {type: Number, required: true},
         aadhar : {type: Number, required: true},
         uid : {type: String, required: true, unique: true},
+        blockToken : {type: String}
     }, 
     {collection: 'user-data'}
 )

@@ -8,9 +8,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-function AdminNavbar() {
+function UserNavbar() {
     const handleLogout = () => {
-        window.localStorage.clear();
         toast.info("Successfully Logged Out !", {
           position: "top-center",
           autoClose: 1000,
@@ -20,8 +19,9 @@ function AdminNavbar() {
           theme: "dark",
         });
         setTimeout(() => {
-          window.location.href = "/";
+          window.localStorage.clear();
           window.sessionStorage.clear();
+          window.location.href = "/";
         }, 500);
     };
     return (
@@ -48,4 +48,4 @@ function AdminNavbar() {
     );
 }
 
-export default AdminNavbar
+export default UserNavbar

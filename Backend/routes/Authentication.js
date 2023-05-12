@@ -14,7 +14,6 @@ const jwtSecretKeyAdmin = "QWRtaW5Mb2dpbg==";
 router.post("/signup", async (req, res) => {
   try {
     const newPassword = await bcrypt.hash(req.body.password, 10);
-    // const newAadhar = await bcrypt.hash(req.body.aadhar, 10)
     await User.create({
       username: req.body.username,
       email: req.body.email,
@@ -35,10 +34,11 @@ router.post("/login", async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,
     mobileNumber: req.body.mobileNumber,
+    uid: req.body.uid,
   });
 
   if (!user) {
-    return res.status(401).json({status: "error", user: false, message: "Invalid email or mobile number !"});
+    return res.status(401).json({status: "error", user: false, message: "Invalid credentials !"});
   }
 
   const isPasswordValid = await bcrypt.compare(
@@ -49,16 +49,13 @@ router.post("/login", async (req, res) => {
   const userDetails = user;
 
   if (isPasswordValid) {
-    const userToken = jwt.sign(
-      {
+    const userToken = jwt.sign({
         username: user.username,
         email: user.email,
-      },
-      jwtSecretKeyUser
-    );
+      }, jwtSecretKeyUser);
     return res.status(200).json({status: "OK", user: userToken,details: userDetails, message: "Login Successful !",});
   } else {
-    return res.status(403).json({status: "error", user: false, message: "Invalid Credentials, Please try again !"});
+    return res.status(403).json({status: "error", user: false, message: "Password Incorrect, Please try again !"});
   }
 });
 
@@ -70,7 +67,7 @@ router.post("/admin_login", async (req, res) => {
   });
 
   if (!admin) {
-    return res.status(403).json({status: "error", admin: false,message: "Invalid email or mobile number !"});
+    return res.status(403).json({status: "error", admin: false,message: "Invalid credentials !"});
   }
 
   const adminDetails = admin;
@@ -91,7 +88,7 @@ router.post("/admin_login", async (req, res) => {
     );
     return res.status(200).json({status: "OK!", admin: adminToken, details: adminDetails});
   } else {
-    return res.status(403).json({status: "error", user: false, message: "Invalid username or email !"});
+    return res.status(403).json({status: "error", user: false, message: "Invalid credentials !"});
   }
 });
 
