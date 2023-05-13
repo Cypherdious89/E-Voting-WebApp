@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router';
 import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
+import Web3 from "web3";
+import ElectionJSON from "../../../../contracts/Election.json";
 
 function CandidateModal({ setIsModalOpen, election}) {
     const navigate = useNavigate();
@@ -166,8 +168,23 @@ function CandidateModal({ setIsModalOpen, election}) {
       }
     };
 
+    async function addCandidateTransaction() {
+      const web3 = new Web3(window.ethereum);
+      const liveElection = new web3.eth.Contract(ElectionJSON.abi , election.address)
+      const adminWalletAddress = await web3.eth.getAccounts();
+      const txReceipt = await liveElection.methods
+        .addContestant(candidateName, candidateAge, candidateUID)
+        .send({
+          from: adminWalletAddress[0],
+          gasLimit: 2100000,
+        });
+      console.log(txReceipt);
+      return txReceipt;
+    }
+
     async function populateCandidate(event) {
       event.preventDefault();
+      await addCandidateTransaction();
       const response = await fetch(`http://localhost:5500/api/candidate/${electionID}/add`, {
           method: 'POST',
           headers: {

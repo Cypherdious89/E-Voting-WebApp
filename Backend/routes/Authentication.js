@@ -21,11 +21,12 @@ router.post("/signup", async (req, res) => {
       mobileNumber: req.body.mobileNumber,
       aadhar: req.body.aadhar,
       uid: req.body.uid,
+      walletAddress: req.body.walletAddress
     });
     return res.status(201).json({status: "OK",message: "User registration successful. Please login to continue...",});
   } catch (err) {
     console.log(err);
-    return res.status(501).json({ status: "error", message: "User already exists" });
+    return res.status(501).json({ status: "error", message: err._message });
   }
 });
 
@@ -52,8 +53,9 @@ router.post("/login", async (req, res) => {
     const userToken = jwt.sign({
         username: user.username,
         email: user.email,
+        address: user.walletAddress
       }, jwtSecretKeyUser);
-    return res.status(200).json({status: "OK", user: userToken,details: userDetails, message: "Login Successful !",});
+    return res.status(200).json({status: "OK", user: userToken, details: userDetails, message: "Login Successful !",});
   } else {
     return res.status(403).json({status: "error", user: false, message: "Password Incorrect, Please try again !"});
   }
@@ -71,18 +73,19 @@ router.post("/admin_login", async (req, res) => {
   }
 
   const adminDetails = admin;
+  // console.log(admin)
   const isPasswordValid = await bcrypt.compare(
     req.body.password,
     admin.password
   );
 
   if (isPasswordValid && req.body.accessCode === adminAccessCode) {
-    const adminToken = jwt.sign(
-      {
+    const adminToken = jwt.sign({
         username: admin.name,
         email: admin.email,
         access: admin.roles[0],
         role: admin.roles[1],
+        address: admin.walletAddress
       },
       jwtSecretKeyAdmin
     );

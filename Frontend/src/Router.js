@@ -97,7 +97,7 @@ function Router() {
             element={<UserProtectedRoute Component={Voting} />}
           />
           <Route
-            path="results"
+            path="elections/:_id/results"
             element={<UserProtectedRoute Component={ViewResults} />}
           />
           <Route

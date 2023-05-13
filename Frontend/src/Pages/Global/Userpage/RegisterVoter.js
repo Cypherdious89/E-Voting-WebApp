@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import UserNavbar from './Components/UserNavbar';
+import Web3 from 'web3';
+import ElectionJSON from '../../../contracts/Election.json'
 
 function Registration() {
     const navigate = useNavigate();
@@ -18,41 +20,67 @@ function Registration() {
         mobile: userDetails.mobileNumber
     }
 
-    async function registerVoter() {
-        const response = await fetch(`http://localhost:5500/api/election/${election._id}/voter/add`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userID,
-              isVerified
-            }),
-          }
-        );
-        const data = await response.json();
-        if (data.status === "OK") {
-            toast.success(data.message, {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme: "dark"
-            })
+    async function addVoterTransaction() {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        if (accounts[0] === userDetails.walletAddress){
+            const liveElection = new web3.eth.Contract(
+              ElectionJSON.abi,
+              election.address
+            );
+            const txReceipt = await liveElection.methods
+              .voterRegisteration(userDetails.walletAddress)
+              .send({
+                from: accounts[0],
+                gasLimit: 2100000
+              });
+            console.log(txReceipt);
+            return txReceipt;
         } else {
-            toast.error(data.message, {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme: "dark"
-            })
+            throw Error('Select correct account');
         }
-        setTimeout(() => {
-          navigate("/user/elections/view/" + electionType);
-        });
+    }
+
+    async function registerVoter() {
+        try {
+            await addVoterTransaction();
+            const response = await fetch(`http://localhost:5500/api/election/${election._id}/voter/add`, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                userID,
+                isVerified
+                }),
+            }
+            );
+            const data = await response.json();
+            if (data.status === "OK") {
+                toast.success(data.message, {
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    theme: "dark"
+                })
+            } else {
+                toast.error(data.message, {
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    theme: "dark"
+                })
+            }
+            setTimeout(() => {
+            navigate("/user/elections/view/" + electionType);
+            });
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     return (

@@ -16,12 +16,66 @@ router.get("/completed", async (req, res) => {
   }
 });
 
-//? Change Election Phase & Status
+//? Get Candidate List and winner for particular election
+router.get("/:election_id/results", async (req, res) => {
+  const electionID = req.params.election_id;
+  try {
+    const getElectionList = await Election.findOne({
+      _id: new ObjectID(`${electionID}`),
+    });
+    const candidateList = getElectionList.candidates;
+    const sortedCandidates = [...candidateList].sort(
+      (a, b) => b.votes.length - a.votes.length
+    );
+    const winner = sortedCandidates.filter(
+      (c) => c.votes.length === sortedCandidates[0].votes.length
+    );
+
+    const filter = {_id: new ObjectID(`${electionID}`)}
+    const update = {$set: {winner: winner}}
+
+    const result = await Election.updateOne(filter, update);
+
+    if (candidateList.length !== 0) {
+      return res.status(200).json({status: "OK", data: {candidates: candidateList, winner: winner}});
+    } else {
+      return res.status(204).json({ status: "error", data: [] });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(501).json({ status: "error", data: err.message });
+  }
+});
+
+//? Change Election Phase
 router.put("/phase", checkRoleAuth, async (req, res) => {
   const electionID = req.body.electionID;
   try {
     const filter = { _id: new ObjectID(`${electionID}`) };
-    const update = { $set: { phase: req.body.phase, active: req.body.active } };
+    let update = null;
+    if (!!req.body.address) {
+      update = {
+        $set: { phase: req.body.phase, address: req.body.address },
+      };
+    } else {
+      update = {
+        $set: { phase: req.body.phase },
+      };
+    }
+    const result = await Election.updateOne(filter, update);
+    return res.status(200).json({ status: "OK" });
+  } catch (err) {
+    console.log(err);
+    return res.status(501).json({ status: "error", data: err.message });
+  }
+});
+
+//? Close election
+router.put('/:election_id/close', async (req, res) => {
+  const electionID = req.params.election_id;
+  try {
+    const filter = { _id: new ObjectID(`${electionID}`) };
+    update = {$set: { active: false }};
     const result = await Election.updateOne(filter, update);
     return res.status(200).json({ status: "OK" });
   } catch (err) {

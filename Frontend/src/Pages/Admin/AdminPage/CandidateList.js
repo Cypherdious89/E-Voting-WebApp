@@ -15,10 +15,12 @@ function CandidateList() {
     const [candidateList, setCandidateList] = useState([])
     const roles = sessionStorage.getItem("adminRoles");
     const adminRoles = JSON.parse(roles);
+    const adminWalletAddress = sessionStorage.getItem("walletAddress");
+    console.log(adminWalletAddress);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const checkCandidatesCount = candidateList.length < election?.maxCandidates;
-
+    console.log(adminRoles)
     useEffect(() => {
         fetch(`http://localhost:5500/api/candidate/${election?._id}/get`, {
           method: "GET",

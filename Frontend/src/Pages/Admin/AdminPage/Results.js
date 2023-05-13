@@ -18,12 +18,17 @@ function Results() {
       <h1>Completed Elections</h1>
       <div className="election-card">
         {electionList.map(ele  => {
+          // console.log(ele)
           return (
             <div key={ele._id}>
               <h3>{ele.title}</h3>
-              <p>Election Department/Zone : {ele.area}</p>
-              <p>Contesting Candidates : {ele.maxCandidate}</p>
-              <p>Winning Seats : {ele.maxVoteCount}</p>
+              {ele.open ?
+              <p>Area Contested : {ele.area}</p>
+              :
+              <p>Department Contested : {ele.department}</p>
+              }
+              <p>Contesting Candidates : {ele.maxCandidates}</p>
+              {/* <p>Winner : {ele.winner[0].Name}</p> */}
             </div>
           )
         })}

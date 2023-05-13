@@ -172,6 +172,7 @@ export default function LogIn() {
               fullWidth
               id="uid"
               label="Unique ID"
+              margin="normal"
             />
             <TextField
               value={mobileNumber}

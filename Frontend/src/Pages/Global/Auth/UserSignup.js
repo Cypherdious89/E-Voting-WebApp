@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
+import Web3 from 'web3';
 
 const theme = createTheme();
 
@@ -116,8 +117,16 @@ function SignUp() {
       return true;
     }
 
+    const getWalletAddress = async () => {
+      const web3 = new Web3(window.ethereum);
+      // await web3.eth.enable();
+      const userWalletAddress = await web3.eth.getAccounts();
+      return userWalletAddress[0];
+    }
+
     async function SignupUser(event){
         event.preventDefault();
+        const walletAddress = await getWalletAddress();
         const response = await fetch('http://localhost:5500/api/signup', {
             method: 'POST',
             headers: {
@@ -129,7 +138,8 @@ function SignUp() {
                 password, 
                 mobileNumber, 
                 aadhar, 
-                uid
+                uid,
+                walletAddress
             })
 
         });

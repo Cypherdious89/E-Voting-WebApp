@@ -1,5 +1,5 @@
-const Migrations =  artifacts.require('Migrations');
+const Migrations =  artifacts.require('Election');
 
-export default function(deployer) {
+module.exports = function(deployer) {
   deployer.deploy(Migrations);
 };

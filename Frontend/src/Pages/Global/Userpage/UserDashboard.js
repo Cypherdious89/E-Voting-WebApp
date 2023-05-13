@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {decodeToken} from "react-jwt";
 import styles from '../Styles/dashboard.module.css';
@@ -6,6 +6,8 @@ import UserNavbar from './Components/UserNavbar'
 
 function UserDashboard() {
     const navigate = useNavigate();
+    var [walletAddress, setWalletAddress ] = useState('');
+    const addressRef = useRef(null);
 
     async function populateUser() {
         const req = await fetch('http://localhost:5500/api/user', {
@@ -26,18 +28,23 @@ function UserDashboard() {
         
         if (userToken) {
             const user = decodeToken(userToken)
+            addressRef.current = user.address;
+
             if(!user){
                 localStorage.removeItem(userToken);
                 navigate('/user/login')
             } else {
                 populateUser();
+                const walletAddress = addressRef.current
+                setWalletAddress(walletAddress)
+                sessionStorage.setItem("walletAddress", walletAddress);
             }
         }
     }, [navigate]);
 
     return (
         <div className={styles.container}>
-            <UserNavbar />
+            <UserNavbar address={walletAddress} />
             <div className={styles.content}>
                 <h1 className={styles.title}>Welcome to User Dashboard</h1>
                 <div className={styles.cardContainer}>

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.8.2 <0.9.0;
+pragma solidity >=0.5.2 <0.9.0;
 
 contract Election{
 	
@@ -57,6 +57,7 @@ contract Election{
 
 	function voterRegisteration(address user) public validState(PHASE.reg){
         require(msg.sender == user);
+		require(voters[user].isRegistered == false);
 		voters[user].isRegistered=true;
 	}
 
@@ -68,5 +69,11 @@ contract Election{
 		contestants[_contestantId].voteCount++;
 		voters[msg.sender].hasVoted=true;
 		voters[msg.sender].vote=_contestantId;
+	}
+
+	function destruct() public onlyAdmin {
+		require(msg.sender == admin);
+		address payable owner = payable(msg.sender);
+		selfdestruct(owner);
 	}
 }

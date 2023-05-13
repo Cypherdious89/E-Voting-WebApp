@@ -3,7 +3,8 @@ import styles from './Styles/Home.module.css'
 import { useNavigate, Link } from 'react-router-dom'
 function Home() {
 	const navigate = useNavigate();
-
+	// const { drizzle } = this.props;
+	// console.log(drizzle.contracts);
 	const checkLoggedIn = localStorage.getItem('userToken') !== null;
 
   	return (

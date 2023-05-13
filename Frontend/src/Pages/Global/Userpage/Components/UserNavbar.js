@@ -21,6 +21,7 @@ function UserNavbar() {
         setTimeout(() => {
           window.localStorage.clear();
           window.sessionStorage.clear();
+          // setGetElection(null)
           window.location.href = "/";
         }, 500);
     };

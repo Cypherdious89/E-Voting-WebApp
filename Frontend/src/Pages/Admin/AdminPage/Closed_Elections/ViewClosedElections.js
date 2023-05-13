@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styles from "../../Styles/view_elections.module.css";
 import AdminNavbar from "../Components/AdminNavbar";
+ /*
 
+ 0                              Modify Election Details     Change Phase
+ 1  Candidate List              Registered Voters           Change Phase
+ 2  Candidate List              Registered Voters           Change Phase
+ 3  Candidate List              Election Result             Close Election
+
+ */
 
 function ViewElections() {
   const [electionList, setElectionList] = useState([]);
-
+  const navigate = useNavigate();
   const phaseMap = {
     0: "Creation phase",
     1: "Registration phase",
     2: "Voting phase",
     3: "Result Phase",
-    4: "Election end phase",
   };
 
   useEffect(() => {
@@ -24,6 +31,39 @@ function ViewElections() {
         setElectionList(elections.data);
       });
   }, []);
+
+  async function closeElection(electionID){
+    const response = await fetch(`http://localhost:5500/api/election/${electionID}/close`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+      const data = await response.json();
+
+      if (data.status === "OK") {
+        toast.success("Election is Complete!", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+        setTimeout(() => {
+          navigate(`/admin/dashboard`);
+        }, 500);
+      } else {
+        toast.error("Some error occurred, please try again !", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+        });
+      }
+  }
 
   const PropertiesGrid = ({ election }) => {
     const properties = [
@@ -50,6 +90,16 @@ function ViewElections() {
   };
 
   const ElectionCard = ({ election }) => {
+
+    const phaseToLink = {
+      0: { path: `/admin/elections/edit/closed/${election._id}/`, text: "Modify Election Details"},
+      1: { path: `/admin/elections/${election._id}/voters`, text: "Registered Voters" },
+      2: { path: `/admin/elections/${election._id}/voters`, text: "Registered Voters" },
+      3: { path: `/admin/elections/${election._id}/results`, text: "Results" },
+    };
+
+    const { path, text } = phaseToLink[election.phase] || {};
+
     return (
       <div className={styles.card}>
         <div className={styles.header}>{election.title}</div>
@@ -57,43 +107,35 @@ function ViewElections() {
           <h4 className={styles.description}>{election.description}</h4>
           <PropertiesGrid election={election} />
           <div className={styles.btn_container}>
-            {election.phase > 0 ? 
+            {election.phase > 0 ? (
               <Link
                 to={`/admin/elections/${election._id}/candidates`}
-                state={{data: {...election}}}
+                state={{ data: { ...election } }}
               >
                 <button className={styles.cardBtn}>Candidate List</button>
               </Link>
-              :
+            ) : (
               ""
-            }
-            {election.phase > 0 ? 
+            )}
+            {election.phase >= 0 && election.phase <= 3 && (
+              <Link to={path} state={{ data: { ...election } }}>
+                <button className={styles.cardBtn}>{text}</button>
+              </Link>
+            )}
+            {election.phase < 3 ? (
               <Link
-              to={`/admin/elections/${election._id}/voters`}
-              state={{data: {...election}}}
-            >
-              <button className = {styles.cardBtn}>
-                Registered Voters
+                to={`/admin/elections/${election._id}/phase`}
+                state={{ data: { ...election } }}
+              >
+                <button className={styles.cardBtn}>
+                  Change Election Phase
+                </button>
+              </Link>
+            ) : (
+              <button className={styles.cardBtn} onClick={() => closeElection(election._id)}>
+                Close Election
               </button>
-            </Link>
-            :
-            <Link
-              to={`/admin/elections/edit/closed/${election._id}`}
-              state={{data: {...election}}}
-            >
-              <button className = {styles.cardBtn}>
-                Modify Election Details
-              </button>
-            </Link>
-            }
-            <Link
-              to={`/admin/elections/${election._id}/phase`}
-              state={{data: {...election}}}
-            >
-              <button className={styles.cardBtn}>
-                Change Election Phase
-              </button>
-            </Link>
+            )}
           </div>
         </div>
       </div>

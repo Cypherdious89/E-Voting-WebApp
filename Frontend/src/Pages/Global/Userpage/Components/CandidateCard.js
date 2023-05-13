@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import VoteModal from './VoteModal'
 
-function CandidateCard({ candidateList, electionID }) {
+function CandidateCard({ candidateList, election }) {
     const [voteModal, setVoteModal] = useState(false);
     const [candidate, setCandidate] = useState([]);
     async function findCandidate(electionID, candidateID) {
@@ -73,7 +73,7 @@ function CandidateCard({ candidateList, electionID }) {
                   size="medium"
                   color="primary"
                   variant="outlined"
-                  onClick={() => findCandidate(electionID, candidate._id)}
+                  onClick={() => findCandidate(election._id, candidate._id)}
                 >
                   Vote
                 </Button>
@@ -85,8 +85,8 @@ function CandidateCard({ candidateList, electionID }) {
         {voteModal && (
           <VoteModal
             setVoteModal={setVoteModal}
-            electionID={electionID}
-            candidateID={candidate._id}
+            election={election}
+            candidate={candidate}
           />
         )}
       </>

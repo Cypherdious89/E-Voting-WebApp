@@ -7,8 +7,10 @@ import AdminNavbar from './Components/AdminNavbar'
 function AdminDashboard() {
     const navigate = useNavigate();
     var [ adminRoles, setAdminRoles ] = useState([]);
+    var [walletAddress, setWalletAddress ] = useState('');
     const accessRef = useRef(null);
     const rolesRef = useRef(null);
+    const addressRef = useRef(null);
 
     async function populateAdmin() {
         const req = await fetch('http://localhost:5500/api/admin', {
@@ -25,23 +27,28 @@ function AdminDashboard() {
         const adminToken = localStorage.getItem('adminToken');
         if (adminToken) {
             const admin = decodeToken(adminToken)
+            // console.log('adminToken', admin)
             accessRef.current = admin.access;
             rolesRef.current = admin.role;
+            addressRef.current = admin.address;
             if(!admin){
                 localStorage.removeItem(adminToken);
                 navigate('/')
             } else {
                 populateAdmin();
                 const adminRoles = [accessRef.current, rolesRef.current];
+                const walletAddress = addressRef.current
                 setAdminRoles(adminRoles)
+                setWalletAddress(walletAddress)
                 sessionStorage.setItem("adminRoles", JSON.stringify(adminRoles));
+                sessionStorage.setItem("walletAddress", walletAddress);
             }
         }
     }, [navigate])
 
     return (
         <div className={styles.container}>
-            <AdminNavbar adminRoles={adminRoles} />
+            <AdminNavbar adminRoles={adminRoles} walletAddress={walletAddress} />
             <div className={styles.content}>
                 <h1 className={styles.title}>Welcome to Admin Dashboard</h1>
                 <div className={styles.cardContainer}>

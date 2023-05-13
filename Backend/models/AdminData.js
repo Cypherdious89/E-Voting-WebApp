@@ -7,6 +7,7 @@ const Admin = new mongoose.Schema(
         roles: {type: Array, required: true},
         password : {type: String, required: true},
         mobileNo : {type: Number, required: true},
+        walletAddress : {type: String},
     },
     {collection: 'admin-data'}
 )

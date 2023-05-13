@@ -3,15 +3,33 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import styles from '../../Styles/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
+import Web3 from "web3";
+import ElectionJSON from "../../../../contracts/Election.json";
 
-const VoteModal = ({setVoteModal, electionID, candidateID}) => {
+
+const VoteModal = ({setVoteModal, election, candidate}) => {
     const navigate = useNavigate();
     const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     const userID = userDetails.uid;
-
+    console.log(`User UID ${userID}`)
+    console.log(`Candidate UID ${candidate.UID}`)
+    async function castVoteTransaction() {
+      const web3 = new Web3(window.ethereum);
+      const liveElection = new web3.eth.Contract(
+        ElectionJSON.abi,
+        election.address
+      );
+      const txReceipt = await liveElection.methods.vote(candidate.UID).send({
+        from: sessionStorage.getItem("walletAddress"),
+        gasLimit: 2100000,
+      });
+      console.log(txReceipt);
+      return txReceipt;
+    }
 
     async function VoteCandidate() {
-        const response = await fetch(`http://localhost:5500/api/election/${electionID}/vote/${candidateID}`, {
+        await castVoteTransaction();
+        const response = await fetch(`http://localhost:5500/api/election/${election._id}/vote/${candidate._id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
