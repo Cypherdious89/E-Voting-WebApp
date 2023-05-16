@@ -89,8 +89,8 @@ function CandidateModal({ setIsModalOpen, election}) {
         // Check if the next three characters are less than the third constraint
         const limitString = uid.substring(7, 10);
         const limit = parseInt(limitString);
-        if (isNaN(limit) || limit >= constraints[2]) {
-          toast.error(`Roll No. must be less than ${constraints[2]}`, {
+        if (isNaN(limit) || limit >= constraints[2] || limit <= 0) {
+          toast.error(`Roll No. must be between than 1 & ${constraints[2]}`, {
               position: "top-center",
               autoClose: 1000,
               hideProgressBar: false,

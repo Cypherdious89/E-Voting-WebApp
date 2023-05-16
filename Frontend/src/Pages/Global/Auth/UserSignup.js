@@ -15,10 +15,12 @@ function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
-    const [aadhar, setAadhar] = useState('');
+    const [age, setAge] = useState('');
     const [uid, setUid] = useState('');
 
     const navigate = useNavigate();
+    const min_age = 10, max_age = 120;
+
 
   const handleKeyDown = (e) => {
     if (!/[0-9]/.test(e.key) && e.key !== "Backspace") {
@@ -137,7 +139,7 @@ function SignUp() {
                 email, 
                 password, 
                 mobileNumber, 
-                aadhar, 
+                age, 
                 uid,
                 walletAddress
             })
@@ -261,16 +263,21 @@ function SignUp() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    value={aadhar}
-                    onChange={(e) => setAadhar(e.target.value)}
-                    name="aadhar"
+                    value={age}
+                    onChange={(e) => {
+                        var val = parseInt(e.target.value, 10);
+                        if (val > max_age) val = max_age;
+                        if (val < min_age) val = min_age;;
+                      setAge(e.target.value)
+                    }}
+                    name="age"
                     required
                     fullWidth
-                    id="aadhar"
-                    label="Aadhar No."
+                    id="age"
+                    label="Enter Age"
                     onKeyDown={handleKeyDown}
-                    inputProps={{ maxLength: 12 }}
-                    type="password"
+                    inputProps={{ maxLength: 3 }}
+                    type="text"
                   />
                 </Grid>
               </Grid>

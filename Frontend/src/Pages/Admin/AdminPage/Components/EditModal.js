@@ -11,9 +11,9 @@ function EditModal({setEditModal, candidate, election}) {
     const adminRoles = JSON.parse(roles);
     const electionID = election._id;
     const phase = election.phase;
+    const candidateUID = candidate.UID;
 
     const [candidateName, setCandidateName] = useState(candidate.Name)
-    const [candidateUID, setCandidateUID] = useState(candidate.UID)
     const [candidateImage, setCandidateImage] = useState(candidate.Photo)
     const [candidateDOB, setCandidateDOB] = useState(candidate.DOB)
     var [candidateAge, setCandidateAge] = useState(candidate.Age)
@@ -40,132 +40,6 @@ function EditModal({setEditModal, candidate, election}) {
         candidateAge = Math.abs(year - 1970);
         setCandidateAge(candidateAge);
     }
-
-    const checkUniqueID = (uid, open, constraints) => {
-      if (!open) {
-        if (uid.length !== 10) {
-          toast.error("Unique ID must have 10 characters", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-        // Check if the first three characters match the first constraint
-        const firstThreeChars = uid.substring(0, 3);
-        if (firstThreeChars !== constraints[0]) {
-          toast.error(`Branch must be ${constraints[0]}`, {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        // Check if the next four characters match the second constraint
-        const yearString = uid.substring(3, 7);
-        const year = parseInt(yearString);
-        if (isNaN(year) || year !== constraints[1]) {
-          toast.error(`Year must be ${constraints[1]}`, {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        // Check if the next three characters are less than the third constraint
-        const limitString = uid.substring(7, 10);
-        const limit = parseInt(limitString);
-        if (isNaN(limit) || limit >= constraints[2]) {
-          toast.error(`Roll No. must be less than ${constraints[2]}`, {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        // Unique ID is valid
-        toast.info("Unique ID is valid", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-        setCandidateUID(uid);
-        return true;
-      } else {
-        if (/[^a-zA-Z]/.test(uid)) {
-          toast.error("Party code must only contain letters", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        if (uid.length === 0) {
-          toast.error("Enter Party Code", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        if (uid.length > 10) {
-          toast.error("Party code must of maximum 10 characters", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "dark",
-          });
-          setCandidateUID("");
-          return false;
-        }
-
-        // Unique ID is valid
-        toast.info("Party Code is valid", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          theme: "dark",
-        });
-        setCandidateUID(uid);
-        return true;
-      }
-    };
 
     async function editCandidate(event){
         event.preventDefault()
@@ -242,27 +116,6 @@ function EditModal({setEditModal, candidate, election}) {
                     onChange={(e) => setCandidateName(e.target.value)}
                     name="hidden"
                     id="name"
-                    className={styles.textField}
-                  />
-                </div>
-                <div className={styles.formData}>
-                  {election.open ? (
-                    <label className={styles.modalLabel}>Party</label>
-                  ) : (
-                    <label className={styles.modalLabel}>Unique ID</label>
-                  )}
-                  <input
-                    type="text"
-                    autoComplete="false"
-                    required
-                    value={candidateUID}
-                    onChange={(e) => setCandidateUID(e.target.value)}
-                    onBlur={(e) => {
-                      const uid = e.target.value;
-                      checkUniqueID(uid, election.open, election.constraints);
-                    }}
-                    name="hidden"
-                    id="uid"
                     className={styles.textField}
                   />
                 </div>

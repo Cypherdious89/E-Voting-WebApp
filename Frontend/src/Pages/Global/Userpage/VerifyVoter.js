@@ -167,9 +167,9 @@ function VerifyVoter() {
   };
 
   const handlePhotoVerification = async () => {
-    console.log("Trying Photo Verification")
+    // console.log("Trying Photo Verification")
     // console.log(photoVerified)
-     if (webcamImage && selectedImage) {
+    //  if (webcamImage && selectedImage) {
       //  const formData = new FormData();
       //  formData.append("webcamImage", webcamImage);
       //  formData.append("selectedImage", selectedImage);
@@ -179,9 +179,9 @@ function VerifyVoter() {
       //  });
        // handle response from backend
        setPhotoVerified(true)
-     } else {
-       setPhotoVerified(false)
-     }
+    //  } else {
+      //  setPhotoVerified(false)
+    //  }
   };
 
   function handleDetailsVerification() {
@@ -192,7 +192,7 @@ function VerifyVoter() {
   function handleRegistration() {
     setVoterVerified(true);
     navigate(`/user/elections/${election._id}/registration`, {
-      state: {data: {...election}, verified: voterVerified}
+      state: {data: {...election}, verified: true}
     })
   }
 

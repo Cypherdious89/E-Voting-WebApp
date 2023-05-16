@@ -40,7 +40,7 @@ function ViewElections() {
   const ElectionCard = ({ election }) => {
     const phaseToLink = {
       1: {
-        path: `/user/elections/${election._id}/verification`,
+        path: `/user/elections/${election._id}/registration`,
         text: "Verify & Register",
       },
       2: { path: `/user/elections/${election._id}/vote`, text: "Vote Now" },

@@ -17,13 +17,12 @@ function EditElection() {
   const [code, setCode] = useState(election.constraints[0]);
   const [maxCandidates, setMaxCandidates] = useState(election.maxCandidates);
   const [maxVoters, setMaxVoters] = useState(election.maxVoter);
-  const [maxWinners, setMaxWinners] = useState(election.maxWinners);
+  const maxWinners = 1;
   const [ageRestriction, setAgeRestriction] =useState(election.ageRestriction);
   const phase = election.phase;
 
   const min_candidates = 1, max_candidates = 100;
   const min_voters = 1, max_voters = 99999999;
-  const min_winners = 1, max_winners = 10;
 
     const handleKeyDown = (e) => {
       if (/[0-9]/.test(e.key)) {
@@ -166,22 +165,6 @@ function EditElection() {
                 id = "maxVoters"
                 label="Maximum Voters Count"
                 InputProps={{ inputProps: { type: 'number', min: min_voters, max: max_voters } }}
-                margin="normal"
-            />
-            <TextField
-                value={maxWinners}
-                onChange = {
-                  (e) => {
-                    var val = parseInt(e.target.value, 10);
-                    if (val > max_winners) val = max_winners;
-                    if (val < min_winners) val = min_winners;
-                    setMaxWinners(val);
-                  }
-                }
-                name = "maxVoteCount" required fullWidth
-                id = "maxVoteCount"
-                label="Maximum Winning Candidates"
-                InputProps={{ inputProps: { type: 'number', min: min_winners, max: max_winners }}}
                 margin="normal"
             />
             <FormGroup>

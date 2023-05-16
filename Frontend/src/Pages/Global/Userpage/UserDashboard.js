@@ -54,7 +54,7 @@ function UserDashboard() {
                             <p>View ongoing elections</p>
                         </div>
                     </Link>
-                    <Link to="/user/results">
+                    <Link to="/user/elections/results">
                         <div className={styles.card}>
                             <h2>Results</h2>
                             <p>View completed results</p>

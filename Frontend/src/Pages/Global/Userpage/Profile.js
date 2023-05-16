@@ -10,7 +10,7 @@ function Profile() {
     name: sessionObject.username,
     email: sessionObject.email,
     mobile: sessionObject.mobileNumber,
-    aadhar: sessionObject.aadhar,
+    age: sessionObject.age,
     uid: sessionObject.uid,
     avatar: userAvatar,
   }
@@ -29,7 +29,7 @@ function Profile() {
             <div className={styles.details}>
               <p><strong>Email:</strong> {user.email}</p>
               <p><strong>Mobile No. :</strong> {user.mobile}</p>
-              <p><strong>Aadhar No. :</strong> {user.aadhar}</p>
+              <p><strong>Age :</strong> {user.age}</p>
               <p><strong>Unique ID :</strong> {user.uid}</p>
             </div>
           </div>

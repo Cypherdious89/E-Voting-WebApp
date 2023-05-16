@@ -2,10 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import NavLogo from './assets/vote.png';
 import styles from '../../Styles/dashboard.module.css';
-import { Avatar, Tooltip } from '@mui/material';
+import { Avatar, Tooltip, IconButton } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+
 
 
 function UserNavbar() {
@@ -32,6 +34,7 @@ function UserNavbar() {
           <span>E-Voting Portal</span>
         </div>
         <div className={styles.navbarRight}>
+          <Link to="/user/dashboard"><IconButton><HomeRoundedIcon sx={{color: 'white'}}/></IconButton></Link>
           <Link onClick={() => handleLogout()} className={styles.logoutBtn}>
             Logout
           </Link>

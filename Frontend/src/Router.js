@@ -26,13 +26,16 @@ import VoterRegistration from './Pages/Global/Userpage/RegisterVoter'
 import Voting from './Pages/Global/Userpage/Vote'
 import ViewResults from "./Pages/Global/Userpage/Results"
 import UserProfile from "./Pages/Global/Userpage/Profile"
+import Verification from "./Pages/Global/Userpage/Verification"
+import CompletedElection from "./Pages/Global/Userpage/CompletedElections"
 
 //Admin Routes
 import AdminLogin from './Pages/Admin/Auth/AdminLogin'
 import AdminDashboard from "./Pages/Admin/AdminPage/AdminDashboard"
+import CompletedElections from "./Pages/Admin/AdminPage/CompletedElections"
 import SelectAddElection from './Pages/Admin/AdminPage/SelectAddElection'
 import SelectViewElection from './Pages/Admin/AdminPage/SelectViewElection'
-import ConcludedElections from "./Pages/Admin/AdminPage/Results"
+import Results from './Pages/Admin/AdminPage/Results'
 import AdminProfile from "./Pages/Admin/AdminPage/Profile"
 import ChangePhase from "./Pages/Admin/AdminPage/ChangePhase"
 import CandidateList from './Pages/Admin/AdminPage/CandidateList'
@@ -69,6 +72,10 @@ function Router() {
             element={<UserProtectedRoute Component={OngoingElections} />}
           />
           <Route
+            path="elections/results"
+            element={<UserProtectedRoute Component={CompletedElection} />}
+          />
+          <Route
             path="elections/view/open"
             element={<UserProtectedRoute Component={ViewOpenElectionsUser} />}
           />
@@ -87,6 +94,10 @@ function Router() {
           <Route
             path="elections/:_id/verification"
             element={<UserProtectedRoute Component={VoterVerification} />}
+          />
+          <Route
+            path="elections/:_id/verify"
+            element={<UserProtectedRoute Component={Verification} />}
           />
           <Route
             path="elections/:_id/registration"
@@ -154,12 +165,16 @@ function Router() {
             element={<AdminProtectedRoute Component={VoterList} />}
           />
           <Route
+            path="elections/:_id/results"
+            element={<AdminProtectedRoute Component={Results} />}
+          />
+          <Route
             path="elections/:_id/phase"
             element={<AdminAccessRoute Component={ChangePhase} />}
           />
           <Route
             path="results"
-            element={<AdminProtectedRoute Component={ConcludedElections} />}
+            element={<AdminProtectedRoute Component={CompletedElections} />}
           />
           <Route
             path="profile"

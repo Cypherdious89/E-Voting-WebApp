@@ -33,26 +33,37 @@ function Results() {
   const location = useLocation();
   const election = location.state?.data
   const electionType = election.open ? 'open' : 'closed';
-
+  const winnerCount = election.maxWinners;
   useEffect(() => {
     // fetch the election data from the backend API
     fetch(`http://localhost:5500/api/election/${election._id}/results`, {
-      method: "GET",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        winnerCount
+      }),
     })
       .then((res) => res.json())
       .then((candidate) => {
         setCandidates(candidate.data.candidates);
-        setWinner(candidate.data.winner);
+        setWinner(candidate.data.winners);
       });
-  }, [election._id]);
+  }, [election._id, winnerCount]);
 
-  console.log(candidates);
-  console.log(winner);
+  const sortedCandidates = [...candidates].sort(
+    (a, b) => b.votes.length - a.votes.length
+  );
+  // console.log(winner);
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Results for {election.title}</h1>
-      <h3>Winner: {winner.map((w) => w.Name).join(", ")}</h3>
+      <div>
+        <h2>Winners</h2>
+        <h3>{winner.map((w) => w.Name).join(", ")}</h3>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -65,7 +76,7 @@ function Results() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {candidates?.map((candidate) => (
+            {sortedCandidates?.map((candidate) => (
               <StyledTableRow key={candidate._id}>
                 <StyledTableCell component="th" scope="row">
                   <img

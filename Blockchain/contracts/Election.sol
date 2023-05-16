@@ -13,17 +13,17 @@ contract Election{
 	}
 
 	struct Voter{
-		bool hasVoted;
-		string vote;
 		bool isRegistered;
+		bool hasVoted;
+		uint votesRemaining;
+    	mapping(string => bool) votedFor;
 	}
 
 	address admin;
 	mapping(string => Contestant) public contestants; 
-   // mapping(address => bool) public voters;
     mapping(address => Voter) public voters;
 	uint public contestantsCount;
-	// uint public counter;
+	uint public maxVoteCount;
 	enum PHASE{reg, voting , done}
 	PHASE public state;
 
@@ -37,11 +37,10 @@ contract Election{
 	    _;
 	}
 
-	constructor() {
+	constructor(uint _maxVoteCount) {
 		admin=msg.sender;
         state=PHASE.reg;
-		// counter = 0;
-
+		maxVoteCount = _maxVoteCount;
 	}
 
     function changeState(PHASE x) onlyAdmin public{
@@ -59,16 +58,21 @@ contract Election{
         require(msg.sender == user);
 		require(voters[user].isRegistered == false);
 		voters[user].isRegistered=true;
+		voters[user].votesRemaining = maxVoteCount;
 	}
 
 	function vote(string memory _contestantId) public validState(PHASE.voting){
-        
-		require(voters[msg.sender].isRegistered);
-		require(!voters[msg.sender].hasVoted);
-        require(keccak256(abi.encodePacked(contestants[_contestantId].uniqueId)) == keccak256(abi.encodePacked(_contestantId)));
-		contestants[_contestantId].voteCount++;
+        require(voters[msg.sender].isRegistered);
+		require(voters[msg.sender].votesRemaining > 0);
+		require(!voters[msg.sender].votedFor[_contestantId]);
+
+        Contestant storage contestant = contestants[_contestantId];
+		require(bytes(contestant.name).length > 0); // check if the contestant exists
+		contestant.voteCount++;
+
 		voters[msg.sender].hasVoted=true;
-		voters[msg.sender].vote=_contestantId;
+		voters[msg.sender].votesRemaining--;
+		voters[msg.sender].votedFor[_contestantId] = true;
 	}
 
 	function destruct() public onlyAdmin {

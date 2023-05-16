@@ -28,6 +28,7 @@ const ChangeElectionPhase = () => {
   const electionStatus = election.active === true ? "Active" : "Closed";
   const type = election.open === true ? "open" : "closed";
   const electionID = election._id;
+  const maxWinners = election.maxWinners;
   let phase = election.phase, active = election.active;
 
   async function createElectionContract() {
@@ -35,6 +36,7 @@ const ChangeElectionPhase = () => {
     const contract = new web3.eth.Contract(electionContract.abi);
     const deployer = contract.deploy({
       data: electionContract.bytecode,
+      arguments: [maxWinners]
     });
     const adminWalletAddress = await web3.eth.getAccounts();
     const deployedElection = await deployer.send({

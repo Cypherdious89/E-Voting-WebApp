@@ -3,11 +3,13 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const twilio = require("twilio");
 
-const twilioAccountSid = "ACe9d2620f5465782ba0b1328ac5adbc38";
-const twilioAuthToken = "9bfae6a5e6848adb1df49c0adef75588";
-const twilioPhoneNumber = "+18622929574";
-const emailUsername = "priyanshsingh1@gmail.com";
-const emailPassword = "lpdjfrjachhqrrnh";
+const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+
+const emailUsername = process.env.EMAIL_USERNAME;
+const emailPassword = process.env.EMAIL_PASSWORD;
+
 let mailOTP, mobileOTP;
 
 //* Generate a random 4-digit OTP

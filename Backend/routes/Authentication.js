@@ -5,9 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UserData");
 const Admin = require("../models/AdminData");
 
-const adminAccessCode = "AdminLogin@2580_IIITA";
-const jwtSecretKeyUser = "VGhpc0lzVGhlTG9naW5TZWNyZXQ=";
-const jwtSecretKeyAdmin = "QWRtaW5Mb2dpbg==";
+const adminAccessCode = process.env.ADMIN_ACCESS_CODE;
 
 //! Authentiction Routes
 //? User signup route
@@ -19,7 +17,7 @@ router.post("/signup", async (req, res) => {
       email: req.body.email,
       password: newPassword,
       mobileNumber: req.body.mobileNumber,
-      aadhar: req.body.aadhar,
+      age: req.body.age,
       uid: req.body.uid,
       walletAddress: req.body.walletAddress
     });
@@ -54,7 +52,7 @@ router.post("/login", async (req, res) => {
         username: user.username,
         email: user.email,
         address: user.walletAddress
-      }, jwtSecretKeyUser);
+      }, process.env.JWT_USER_KEY);
     return res.status(200).json({status: "OK", user: userToken, details: userDetails, message: "Login Successful !",});
   } else {
     return res.status(403).json({status: "error", user: false, message: "Password Incorrect, Please try again !"});
@@ -87,7 +85,7 @@ router.post("/admin_login", async (req, res) => {
         role: admin.roles[1],
         address: admin.walletAddress
       },
-      jwtSecretKeyAdmin
+      process.env.JWT_ADMIN_KEY
     );
     return res.status(200).json({status: "OK!", admin: adminToken, details: adminDetails});
   } else {
@@ -100,7 +98,7 @@ router.post("/admin_login", async (req, res) => {
 router.get('/user', async (req, res) => {
     const userToken = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(userToken, "VGhpc0lzVGhlTG9naW5TZWNyZXQ=")
+        const decoded = jwt.verify(userToken, process.env.JWT_USER_KEY);
         const email = decoded.email
         const user = await User.findOne({email: email})
         if(user)
@@ -119,7 +117,7 @@ router.get('/user', async (req, res) => {
 router.get('/admin', async (req, res) => {
     const adminToken = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(adminToken, "QWRtaW5Mb2dpbg==")
+        const decoded = jwt.verify(adminToken, process.env.JWT_ADMIN_KEY)
         const email = decoded.email
         const admin = await Admin.findOne({email: email})
         if (admin)

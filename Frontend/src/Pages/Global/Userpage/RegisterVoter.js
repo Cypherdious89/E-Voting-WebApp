@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
@@ -10,15 +10,20 @@ function Registration() {
     const navigate = useNavigate();
     const location = useLocation();
     const election = location.state?.data;
-    const isVerified = location.state?.isVerified;
+    // const isVerified = location.state?.isVerified;
     const electionType = election.open ? "open" : "closed";
     const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     const userID = userDetails.uid;
     const userinfo = {
         name: userDetails.username,
         email: userDetails.email,
-        mobile: userDetails.mobileNumber
+        mobile: userDetails.mobileNumber,
+        uid: userDetails.uid
     }
+    const [isVerified, setIsVerified] = useState(false)
+    // const [tokenHash, setTokenHash] = useState("")
+
+    console.log(userID, isVerified)
 
     async function addVoterTransaction() {
         const web3 = new Web3(window.ethereum);
@@ -35,11 +40,103 @@ function Registration() {
                 gasLimit: 2100000
               });
             console.log(txReceipt);
+            // setTokenHash(txReceipt.tokenHash)
             return txReceipt;
         } else {
             throw Error('Select correct account');
         }
     }
+
+    const handleUIDVerification = (userID) => {
+      if (election.open) {
+        const userIDparams = userID.slice(0, 3);
+        if (userIDparams !== election.constraints[0]) {
+          toast.error(
+            `Your Unique ID should start with ${election.constraints[0]}`,
+            {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark",
+            }
+          );
+          setIsVerified(false);
+          return;
+        } else {
+          toast.success(
+            "Your Unique ID is Verified. You can vote in this election.",
+            {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark",
+            }
+          );
+          setIsVerified(true);
+          return;
+        }
+      } else {
+        const branch = userID.slice(0, 3);
+        const year = userID.slice(3, 7);
+        const rollNo = userID.slice(7, 10);
+
+        if (branch !== election.constraints[0]) {
+          toast.error(`Your branch should be ${election.constraints[0]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setIsVerified(false);
+          return;
+        } else if (parseInt(year) !== election.constraints[1]) {
+          toast.error(`Your batch year should be ${election.constraints[1]}`, {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setIsVerified(false);
+          return;
+        } else if (
+          parseInt(rollNo) > election.constraints[2] &&
+          parseInt(rollNo) > 0
+        ) {
+          toast.error(
+            `Your roll no should be less than ${election.constraints[2]}`,
+            {
+              position: "top-center",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "dark",
+            }
+          );
+          setIsVerified(false);
+          return;
+        } else {
+          toast.success("Your Unique ID is Verified", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "dark",
+          });
+          setIsVerified(true);
+          return;
+        }
+      }
+    };
 
     async function registerVoter() {
         try {
@@ -50,8 +147,8 @@ function Registration() {
                 "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                userID,
-                isVerified
+                    userID,
+                    isVerified
                 }),
             }
             );
@@ -84,22 +181,37 @@ function Registration() {
     }
 
     return (
-        <>
-            <UserNavbar />
-            <h1>Voter Registration</h1>
-            <h3>Your Details</h3>
-            <p>Name: {userinfo.name}</p>
-            <p>Email: {userinfo.email}</p>
-            <p>Mobile: {userinfo.mobile}</p>
-            <h3>Election Details</h3>
-            <p>Title: {election.title}</p>
-            <Button variant="contained" color="primary" sx={{ width: 150, mx: 1, my: 2 }}
-                onClick={() => registerVoter()}
-            >
-                Register
-            </Button>
-        </>
-    )
+      <>
+        <UserNavbar />
+        <h1>Voter Registration</h1>
+        <h3>Your Details</h3>
+        <p>Name: {userinfo.name}</p>
+        <p>Email: {userinfo.email}</p>
+        <p>Mobile: {userinfo.mobile}</p>
+        <p>Mobile: {userinfo.uid}</p>
+        <h3>Election Details</h3>
+        <p>Title: {election.title}</p>
+        {isVerified ? (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ width: 150, mx: 1, my: 2 }}
+            onClick={() => registerVoter()}
+          >
+            Register
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ width: 150, mx: 1, my: 2 }}
+            onClick={() => handleUIDVerification(userID)}
+          >
+            Verify UID
+          </Button>
+        )}
+      </>
+    );
 }
 
 export default Registration

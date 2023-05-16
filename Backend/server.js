@@ -1,3 +1,4 @@
+require('dotenv/config');
 const express = require('express');
 const app = express();
 const cors = require("cors");
@@ -11,12 +12,10 @@ const candidatesRoutes = require('./routes/Candidates')
 
 app.use(cors());
 app.use(express.json({ limit: "5mb" }));
-
-const port = 5500;
-const mongoURI = "mongodb://0.0.0.0:27017/e-voting-webapp";
+// app.use(express.static("public"));
 
 mongoose
-  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGODB_URL_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
@@ -37,6 +36,6 @@ app.get("*", (req, res) => {
 })
 
 //! Listening port Route
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server running on PORT 5500");
 });

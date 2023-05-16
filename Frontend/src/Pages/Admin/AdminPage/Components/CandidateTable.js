@@ -1,21 +1,11 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import {
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
+import {IconButton, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import EditModal from "./EditModal";
-import DeleteModal from "./DeleteModal";
+// import DeleteModal from "./DeleteModal";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,14 +22,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function CandidateTable({ candidateList, election }) {
   const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  // const [deleteModal, setDeleteModal] = useState(false);
   const [candidate, setCandidate] = useState([]);
   const roles = sessionStorage.getItem("adminRoles");
   const adminRoles = JSON.parse(roles);
   const electionID = election._id;
   const phase = election.phase;
 
-  async function findCandidate(electionID, candidateID, buttonClicked) {
+  async function findCandidate(electionID, candidateID) {
     const response = await fetch(
       `http://localhost:5500/api/candidate/${electionID}/find/${candidateID}`,
       {
@@ -52,8 +42,9 @@ function CandidateTable({ candidateList, election }) {
     const data = await response.json();
     if (data.status === "OK") {
       setCandidate(data.candidate);
-      if (buttonClicked === "EDIT") setEditModal(true);
-      else setDeleteModal(true);
+      setEditModal(true);
+      // if (buttonClicked === "EDIT") setEditModal(true);
+      // else setDeleteModal(true);
     } else console.log(data.error);
   }
 
@@ -104,7 +95,7 @@ function CandidateTable({ candidateList, election }) {
                           adminRoles[0] === "readwrite" &&
                           adminRoles[1] === "Admin"
                         )
-                          findCandidate(electionID, candidate._id, "EDIT");
+                          findCandidate(electionID, candidate._id);
                         else
                           toast.error(
                             "Only admins can add or modify candidates",
@@ -121,7 +112,7 @@ function CandidateTable({ candidateList, election }) {
                     >
                       <EditIcon />
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="delete"
                       color="error"
                       onClick={() => {
@@ -146,7 +137,7 @@ function CandidateTable({ candidateList, election }) {
                       }}
                     >
                       <DeleteIcon />
-                    </IconButton>
+                    </IconButton> */}
                   </StyledTableCell>
                 ) : (
                   ""
@@ -163,14 +154,14 @@ function CandidateTable({ candidateList, election }) {
           election={election}
         />
       )}
-      {deleteModal && (
+      {/* {deleteModal && (
         <DeleteModal
           setDeleteModal={setDeleteModal}
           electionID={electionID}
           candidateID={candidate._id}
           phase={phase}
         />
-      )}
+      )} */}
     </>
   );
 }

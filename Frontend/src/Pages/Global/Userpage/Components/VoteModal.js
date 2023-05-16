@@ -13,6 +13,8 @@ const VoteModal = ({setVoteModal, election, candidate}) => {
     const userID = userDetails.uid;
     console.log(`User UID ${userID}`)
     console.log(`Candidate UID ${candidate.UID}`)
+    const electionType = election.open ? "open" : "closed";
+    // const winnerCount = election.maxWinners;
     async function castVoteTransaction() {
       const web3 = new Web3(window.ethereum);
       const liveElection = new web3.eth.Contract(
@@ -35,10 +37,11 @@ const VoteModal = ({setVoteModal, election, candidate}) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            userID
+            userID,
         })
         });
         const data = await response.json();
+        console.log(data)
         if(data.status === 'OK') {
             toast.success(data.message, {
                 position: "top-center",
@@ -49,12 +52,12 @@ const VoteModal = ({setVoteModal, election, candidate}) => {
                 theme: "dark"
             })
             setTimeout(() => {
-                navigate(`/user/dashboard`, {
+                navigate(`/user/elections/view/${electionType}`, {
                 state: { data: { ...data.election } },
                 });
             }, 500);
         } else {
-            console.log(data.data)
+            // console.log(data.data)
             toast.error(data.message, {
             position: "top-center",
             autoClose: 500,
@@ -69,9 +72,9 @@ const VoteModal = ({setVoteModal, election, candidate}) => {
               });
             }, 500);
         }
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 1000);
     }
     return (
         <>
