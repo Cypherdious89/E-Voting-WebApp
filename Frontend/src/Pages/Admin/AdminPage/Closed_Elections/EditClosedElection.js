@@ -100,7 +100,7 @@ function EditClosedElection() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><PollRoundedIcon /></Avatar>
-          <Typography component="h1" variant="h5">Add Closed Election</Typography>
+          <Typography component="h1" variant="h5">Edit Closed Election</Typography>
           <Box component = "form" onSubmit = {EditElection} noValidate sx = {{mt: 1}} >
             <TextField
                 value={title}

@@ -4,40 +4,36 @@ import { toast } from "react-toastify";
 import styles from './assets/Modal.module.css'
 import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
+const Modal = ({electionID, setDeleteModal}) => {
   const navigate = useNavigate();
   const roles = sessionStorage.getItem("adminRoles");
   const adminRoles = JSON.parse(roles);
 
-  async function deleteCandidate() {
-    const response = await fetch(`http://localhost:5500/api/candidate/${electionID}/delete/${candidateID}`, {
+  async function deleteElection() {
+    const response = await fetch(`http://localhost:5500/api/election/${electionID}/delete`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         adminRoles,
-        phase
       })
     });
     const data = await response.json();
     if(data.status === 'OK') {
       toast.success(data.message, {
         position: "top-center",
-        autoClose: 500,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         theme: "dark"
       })
       setTimeout(() => {
-        navigate(`/admin/elections/${electionID}/candidates`, {
-          state: { data: { ...data.election } },
-        });
+        navigate(`/admin/dashboard`);
       }, 500);
     } else {
-      console.log(data.data)
-      toast.error(data.message, {
+      toast.error(data.error, {
         position: "top-center",
         autoClose: 500,
         hideProgressBar: false,
@@ -46,9 +42,6 @@ const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
         theme: "dark"
       })
     }
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   }
   return (
     <>
@@ -62,11 +55,11 @@ const Modal = ({setDeleteModal, electionID, candidateID, phase}) => {
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            Are you sure you want to delete the candidate ?
+            Are you sure you want to delete the election ?
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
-              <button className={styles.deleteBtn} onClick={() => deleteCandidate()}>Delete</button>
+              <button className={styles.deleteBtn} onClick={() => deleteElection()}>Delete</button>
               <button className={styles.cancelBtn} onClick={() => setDeleteModal(false)}>Cancel</button>
             </div>
           </div>

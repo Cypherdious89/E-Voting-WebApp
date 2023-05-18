@@ -21,12 +21,10 @@ import ViewClosedElectionsUser from './Pages/Global/Userpage/ViewClosedElections
 import ViewOpenElectionsUser from './Pages/Global/Userpage/ViewOpenElections'
 import CandidateListUser from './Pages/Global/Userpage/CandidateList'
 import ElectionDetails from './Pages/Global/Userpage/ElectionDetails'
-import VoterVerification from './Pages/Global/Userpage/VerifyVoter'
 import VoterRegistration from './Pages/Global/Userpage/RegisterVoter'
 import Voting from './Pages/Global/Userpage/Vote'
 import ViewResults from "./Pages/Global/Userpage/Results"
 import UserProfile from "./Pages/Global/Userpage/Profile"
-import Verification from "./Pages/Global/Userpage/Verification"
 import CompletedElection from "./Pages/Global/Userpage/CompletedElections"
 
 //Admin Routes
@@ -90,14 +88,6 @@ function Router() {
           <Route
             path="elections/:_id/details"
             element={<UserProtectedRoute Component={ElectionDetails} />}
-          />
-          <Route
-            path="elections/:_id/verification"
-            element={<UserProtectedRoute Component={VoterVerification} />}
-          />
-          <Route
-            path="elections/:_id/verify"
-            element={<UserProtectedRoute Component={Verification} />}
           />
           <Route
             path="elections/:_id/registration"

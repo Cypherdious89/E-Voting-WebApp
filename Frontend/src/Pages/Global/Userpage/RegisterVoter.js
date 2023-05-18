@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import UserNavbar from './Components/UserNavbar';
+import styles from '../Styles/register.module.css'
 import Web3 from 'web3';
 import ElectionJSON from '../../../contracts/Election.json'
 
@@ -183,33 +184,48 @@ function Registration() {
     return (
       <>
         <UserNavbar />
-        <h1>Voter Registration</h1>
-        <h3>Your Details</h3>
-        <p>Name: {userinfo.name}</p>
-        <p>Email: {userinfo.email}</p>
-        <p>Mobile: {userinfo.mobile}</p>
-        <p>Mobile: {userinfo.uid}</p>
-        <h3>Election Details</h3>
-        <p>Title: {election.title}</p>
-        {isVerified ? (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: 150, mx: 1, my: 2 }}
-            onClick={() => registerVoter()}
-          >
-            Register
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: 150, mx: 1, my: 2 }}
-            onClick={() => handleUIDVerification(userID)}
-          >
-            Verify UID
-          </Button>
-        )}
+        <div className={styles.container}>
+          <h1 className={styles.title}>Voter Registration</h1>
+          <div className={styles.card}>
+            <div className={styles.cardContent}>
+              <h3 className={styles.subtitle}>Your Details</h3>
+              <p className={styles.details}>Name: {userinfo.name}</p>
+              <p className={styles.details}>Email: {userinfo.email}</p>
+              <p className={styles.details}>Mobile: {userinfo.mobile}</p>
+              <p className={styles.details}>Unique ID: {userinfo.uid}</p>
+            </div>
+          </div>
+          <div className={styles.card}>
+            <div className={styles.cardContent}>
+              <h3 className={styles.subtitle}>Election Details</h3>
+              <p className={styles.details}>Title: {election.title}</p>
+              <p className={styles.details}>{election.description}</p>
+            </div>
+          </div>
+          {isVerified ? (
+            <div className={styles.buttonContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={styles.button}
+                onClick={() => registerVoter()}
+              >
+                Register
+              </Button>
+            </div>
+          ) : (
+            <div className={styles.buttonContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={styles.button}
+                onClick={() => handleUIDVerification(userID)}
+              >
+                Verify UID
+              </Button>
+            </div>
+          )}
+        </div>
       </>
     );
 }

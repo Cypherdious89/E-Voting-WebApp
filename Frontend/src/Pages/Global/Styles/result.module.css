@@ -1,0 +1,39 @@
+.container {
+  margin: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 36px;
+  /* text-align: center; */
+}
+.electionCard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+.electionCard > div {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.electionCard h3 {
+  font-size: 18px;
+  margin-top: 0;
+}
+
+.electionCard p {
+  margin-bottom: 10px;
+}
+
+.electionCard .winners {
+  font-weight: bold;
+}
+
+.electionCard .deleteBtn {
+  float: right;
+  width: 100px;
+}

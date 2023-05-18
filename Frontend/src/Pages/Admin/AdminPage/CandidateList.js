@@ -21,6 +21,7 @@ function CandidateList() {
 
     const checkCandidatesCount = candidateList.length < election?.maxCandidates;
     console.log(adminRoles)
+    
     useEffect(() => {
         fetch(`http://localhost:5500/api/candidate/${election?._id}/get`, {
           method: "GET",

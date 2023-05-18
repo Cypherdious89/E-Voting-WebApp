@@ -109,7 +109,7 @@ function Results() {
           color="primary"
           sx={{ width: 150, mx: 1, my: 2 }}
           onClick={() =>
-            navigate(`/user/elections/view/${electionType}`, {
+            navigate(`/admin/elections/view/${electionType}`, {
               state: { data: { ...election } },
             })
           }

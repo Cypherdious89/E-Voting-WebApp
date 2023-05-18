@@ -111,7 +111,7 @@
 }
 
 .primaryBtn:hover {
-  box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+  box-shadow: 0 10px 20px -10px rgba(0, 123, 255, 0.67);
   transform: translateY(-5px);
   background: #0069d9;
 }

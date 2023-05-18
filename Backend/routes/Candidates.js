@@ -115,37 +115,37 @@ router.post("/:election_id/find/:candidate_id", async (req, res) => {
 });
 
 //? Find particular candidate in a election & delete it
-router.delete("/:election_id/delete/:candidate_id", checkRoleAuth, async (req, res) => {
-    const electionID = req.params.election_id, candidateID = req.params.candidate_id;
-    const phase = req.body.phase;
-    if (phase === 1) {
-      try {
-        const filter = { _id: electionID };
-        const update = { $pull: { candidates: { _id: candidateID } } };
-        const result = await Election.updateOne(filter, update);
-        console.log("Items matched : ", result.matchedCount);
-        console.log("Items modified : ", result.modifiedCount);
-        const updatedElections = await Election.findOne(filter);
-        return res.status(200).json({
-          status: "OK",
-          election: updatedElections,
-          message: "Candidate Deleted Successfully !",
-        });
-      } catch (err) {
-        console.log(err);
-        return res.status(403).json({
-          status: "Error",
-          data: err.message,
-          message: "Server Error",
-        });
-      }
-    } else {
-      return res.status(501).json({
-        status: "Error",
-        message: "Cannot delete candidate in this phase",
-      });
-    }
-  }
-);
+// router.delete("/:election_id/delete/:candidate_id", checkRoleAuth, async (req, res) => {
+//     const electionID = req.params.election_id, candidateID = req.params.candidate_id;
+//     const phase = req.body.phase;
+//     if (phase === 1) {
+//       try {
+//         const filter = { _id: electionID };
+//         const update = { $pull: { candidates: { _id: candidateID } } };
+//         const result = await Election.updateOne(filter, update);
+//         console.log("Items matched : ", result.matchedCount);
+//         console.log("Items modified : ", result.modifiedCount);
+//         const updatedElections = await Election.findOne(filter);
+//         return res.status(200).json({
+//           status: "OK",
+//           election: updatedElections,
+//           message: "Candidate Deleted Successfully !",
+//         });
+//       } catch (err) {
+//         console.log(err);
+//         return res.status(403).json({
+//           status: "Error",
+//           data: err.message,
+//           message: "Server Error",
+//         });
+//       }
+//     } else {
+//       return res.status(501).json({
+//         status: "Error",
+//         message: "Cannot delete candidate in this phase",
+//       });
+//     }
+//   }
+// );
 
 module.exports = router

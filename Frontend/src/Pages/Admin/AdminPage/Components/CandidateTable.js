@@ -44,7 +44,6 @@ function CandidateTable({ candidateList, election }) {
       setCandidate(data.candidate);
       setEditModal(true);
       // if (buttonClicked === "EDIT") setEditModal(true);
-      // else setDeleteModal(true);
     } else console.log(data.error);
   }
 
@@ -112,32 +111,7 @@ function CandidateTable({ candidateList, election }) {
                     >
                       <EditIcon />
                     </IconButton>
-                    {/* <IconButton
-                      aria-label="delete"
-                      color="error"
-                      onClick={() => {
-                        if (
-                          adminRoles[0] === "readwrite" &&
-                          adminRoles[1] === "Admin"
-                        )
-                          findCandidate(electionID, candidate._id, "DELETE");
-                        else {
-                          toast.error(
-                            "Only admins can add or modify candidates",
-                            {
-                              position: "top-center",
-                              autoClose: 1000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              theme: "dark",
-                            }
-                          );
-                        }
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton> */}
+                    
                   </StyledTableCell>
                 ) : (
                   ""
@@ -154,14 +128,6 @@ function CandidateTable({ candidateList, election }) {
           election={election}
         />
       )}
-      {/* {deleteModal && (
-        <DeleteModal
-          setDeleteModal={setDeleteModal}
-          electionID={electionID}
-          candidateID={candidate._id}
-          phase={phase}
-        />
-      )} */}
     </>
   );
 }

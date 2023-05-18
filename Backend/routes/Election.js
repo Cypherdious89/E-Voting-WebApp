@@ -102,8 +102,8 @@ router.put('/:election_id/close', async (req, res) => {
 });
 
 //? Add voter to election
-router.post('/:_id/voter/add', async (req, res) => {
-  const electionID = req.params._id;
+router.post('/:election_id/voter/add', async (req, res) => {
+  const electionID = req.params.election_id;
   const voterID = req.body.userID;
   const verifiedVoter = req.body.isVerified;
   console.log(electionID, voterID, verifiedVoter);
@@ -145,7 +145,7 @@ router.post("/:election_id/vote/:candidate_id", async (req, res) => {
     // console.log(candidate)
     const voteIndex = candidate.votes.indexOf(voterID);
     if (voteIndex === -1) {
-      console.log(voterID)
+      // console.log(voterID)
       candidate.votes.push(voterID);
       // console.log(candidate.votes)
       await getCandidate.save();
@@ -158,5 +158,20 @@ router.post("/:election_id/vote/:candidate_id", async (req, res) => {
     console.log(err);
     return res.status(501).json({ status: "error", data: err.message, message: "Server Error" });
 }});
+
+router.delete("/:election_id/delete", checkRoleAuth, async (req, res) => {
+  try {
+    const electionId = req.params.election_id;
+    // Find the election by ID and delete it
+    const deletedElection = await Election.findByIdAndDelete(electionId);
+    if (!deletedElection) {
+      return res.status(404).json({ status: "err", error: "Election not found" });
+    }
+    return res.json({ status: "OK", message: "Election deleted successfully" });
+  } catch (error) {
+    console.error("Failed to delete election", error);
+    return res.status(500).json({status: "err", error: "Failed to delete election" });
+  }
+});
 
 module.exports = router;
