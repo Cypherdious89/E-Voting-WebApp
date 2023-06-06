@@ -88,7 +88,7 @@ router.put("/phase", checkRoleAuth, async (req, res) => {
 });
 
 //? Close election
-router.put('/:election_id/close', async (req, res) => {
+router.put('/:election_id/close', checkRoleAuth, async (req, res) => {
   const electionID = req.params.election_id;
   try {
     const filter = { _id: new ObjectID(`${electionID}`) };
@@ -159,6 +159,7 @@ router.post("/:election_id/vote/:candidate_id", async (req, res) => {
     return res.status(501).json({ status: "error", data: err.message, message: "Server Error" });
 }});
 
+//? Find election by ID and delete
 router.delete("/:election_id/delete", checkRoleAuth, async (req, res) => {
   try {
     const electionId = req.params.election_id;
