@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const otpRoutes = require('./routes/OTP_Verification')
 const authRoutes = require('./routes/Authentication')
 const electionRoutes = require('./routes/Election')
 const openElectionRoutes = require('./routes/OpenElection')
@@ -12,7 +11,6 @@ const candidatesRoutes = require('./routes/Candidates')
 
 app.use(cors());
 app.use(express.json({ limit: "5mb" }));
-// app.use(express.static("public"));
 
 mongoose
   .connect(process.env.MONGODB_URL_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -20,7 +18,6 @@ mongoose
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
 app.use('/api', authRoutes);
-app.use('/api/otp', otpRoutes);
 app.use('/api/election', electionRoutes);
 app.use("/api/candidate", candidatesRoutes);
 app.use("/api/election/open", openElectionRoutes);
